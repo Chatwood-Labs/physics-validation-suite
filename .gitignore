@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.coverage
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.venv/
+build/
+dist/
+pvs-output/
+
+
+# Local evidence and acceptance diagnostics
+quickstart-evidence/
+json-evidence/
+command-evidence/
+benchmark-evidence/
+acceptance-runs/

@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chatwoodlabs.com/schemas/pvs-manifest-v3.schema.json",
+  "title": "Physics Validation Suite package manifest envelope v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "package",
+    "integrity"
+  ],
+  "properties": {
+    "schema": {
+      "const": "pvs-manifest/3"
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "created_at",
+        "policy",
+        "report_profiles",
+        "files"
+      ],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "minLength": 75,
+          "maxLength": 75,
+          "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])pvs:sha256:[0-9a-f]{64}$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "embed_artifacts",
+            "html",
+            "pdf"
+          ],
+          "properties": {
+            "embed_artifacts": {
+              "$ref": "#/$defs/resolved_policy"
+            },
+            "html": {
+              "$ref": "#/$defs/resolved_policy"
+            },
+            "pdf": {
+              "$ref": "#/$defs/resolved_policy"
+            }
+          }
+        },
+        "report_profiles": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "html",
+            "pdf"
+          ],
+          "properties": {
+            "html": {
+              "const": "pvs-html/3"
+            },
+            "pdf": {
+              "const": "pvs-pdf/3"
+            }
+          }
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "role",
+              "sha256",
+              "size_bytes"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "enum": [
+                  "case",
+                  "evidence",
+                  "report",
+                  "log",
+                  "artifact"
+                ]
+              },
+              "sha256": {
+                "type": "string",
+                "minLength": 64,
+                "maxLength": 64,
+                "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])[0-9a-f]{64}$"
+              },
+              "size_bytes": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalization",
+        "algorithm",
+        "digest",
+        "package_id"
+      ],
+      "properties": {
+        "canonicalization": {
+          "const": "RFC8785"
+        },
+        "algorithm": {
+          "const": "sha256"
+        },
+        "digest": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])[0-9a-f]{64}$"
+        },
+        "package_id": {
+          "type": "string",
+          "minLength": 83,
+          "maxLength": 83,
+          "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])pvs-package:sha256:[0-9a-f]{64}$"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "resolved_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effective",
+        "source"
+      ],
+      "properties": {
+        "effective": {
+          "type": "boolean"
+        },
+        "source": {
+          "enum": [
+            "schema_default",
+            "case",
+            "runtime_override"
+          ]
+        }
+      }
+    }
+  }
+}

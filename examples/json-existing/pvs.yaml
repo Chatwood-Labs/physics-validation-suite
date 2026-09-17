@@ -1,0 +1,76 @@
+schema: pvs-case/2
+id: example-json-existing
+version: 1.0.0
+title: Existing JSON artefact validation
+description: Demonstrates schema, finite, range, monotonic and conservation checks.
+classifications: [verification]
+
+subject:
+  name: synthetic-json-producer
+  version: 1.0.0
+
+artifacts:
+  result:
+    path: result.json
+    role: output
+    format: json
+  result-schema:
+    path: result.schema.json
+    role: reference
+    format: json
+    expected_sha256: b9980f7264f62fc635fa9bad6a93bdcb2855841ad7d7396f86f1a65e9d94a8b6
+
+checks:
+  - id: result-exists
+    type: exists
+    artifact: result
+  - id: result-schema
+    type: schema
+    artifact: result
+    schema_artifact: result-schema
+  - id: temperature-finite
+    type: finite
+    source:
+      artifact: result
+      pointer: /temperature
+      unit: K
+    unit: K
+  - id: fraction-range
+    type: range
+    source:
+      artifact: result
+      pointer: /fraction
+      unit: "1"
+    unit: "1"
+    minimum: 0.0
+    maximum: 1.0
+  - id: temperature-decreases
+    type: monotonic
+    source:
+      artifact: result
+      pointer: /temperature
+      unit: K
+    unit: K
+    direction: decreasing
+    absolute_tolerance: 0.0
+  - id: particle-conservation
+    type: conservation
+    terms:
+      - label: injected
+        value: {artifact: result, pointer: /injected, unit: "1"}
+        coefficient: 1.0
+      - label: deposited
+        value: {artifact: result, pointer: /deposited, unit: "1"}
+        coefficient: -1.0
+      - label: lost
+        value: {artifact: result, pointer: /lost, unit: "1"}
+        coefficient: -1.0
+    expected: {value: 0.0, unit: "1"}
+    unit: "1"
+    absolute_tolerance: 1.0e-12
+    relative_tolerance: 0.0
+
+package:
+  embed_artifacts: true
+  html: true
+  pdf: true

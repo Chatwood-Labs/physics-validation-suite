@@ -1,0 +1,355 @@
+{
+  "schema": "pvs-local-norm-benchmark/1",
+  "date": "2026-09-07",
+  "method": "Sequential processes using the same frozen CPython 3.12 / NumPy 2.2.6 environment; no concurrent test suite.",
+  "baseline": {
+    "pvs_version": "0.2.6",
+    "python": "3.12.3",
+    "numpy": "2.2.6",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "timing_repeats": 5,
+    "timing_method": "Median of independent calls after one untimed warm-up per workload",
+    "memory_method": "Separate tracemalloc call; inputs allocated before tracing; not RSS",
+    "qualification": "Local microbenchmark, not production performance qualification",
+    "results": [
+      {
+        "layout": "profile",
+        "size_parameter": 64,
+        "elements": 64,
+        "shape": [
+          64
+        ],
+        "input_c_contiguous": true,
+        "median_seconds": 4.0920000174082816e-05,
+        "times_seconds": [
+          5.004299964639358e-05,
+          4.3734002247219905e-05,
+          4.0920000174082816e-05,
+          4.065000030095689e-05,
+          3.899700095644221e-05
+        ],
+        "tracemalloc_peak_bytes": 4416,
+        "norms_hex": {
+          "l1": "0x1.0410410410410p+5",
+          "l2": "0x1.2c424061f3c28p+2",
+          "linf": "0x1.0000000000000p+0"
+        }
+      },
+      {
+        "layout": "strided-field",
+        "size_parameter": 64,
+        "elements": 128,
+        "shape": [
+          64,
+          2
+        ],
+        "input_c_contiguous": false,
+        "median_seconds": 6.680799924652092e-05,
+        "times_seconds": [
+          7.130500307539478e-05,
+          6.680799924652092e-05,
+          8.378300117328763e-05,
+          6.62969978293404e-05,
+          6.447499981732108e-05
+        ],
+        "tracemalloc_peak_bytes": 6984,
+        "norms_hex": {
+          "l1": "0x1.053d3d3d3d3d4p+6",
+          "l2": "0x1.adedf2bafcb77p+2",
+          "linf": "0x1.2000000000000p+0"
+        }
+      },
+      {
+        "layout": "profile",
+        "size_parameter": 200000,
+        "elements": 200000,
+        "shape": [
+          200000
+        ],
+        "input_c_contiguous": true,
+        "median_seconds": 0.07661293700220995,
+        "times_seconds": [
+          0.07989827300116303,
+          0.07650707100037835,
+          0.08638822799912305,
+          0.076489215996844,
+          0.07661293700220995
+        ],
+        "tracemalloc_peak_bytes": 8025856,
+        "norms_hex": {
+          "l1": "0x1.86a0800029f17p+16",
+          "l2": "0x1.02333f0b985d8p+8",
+          "linf": "0x1.0000000000000p+0"
+        }
+      },
+      {
+        "layout": "strided-field",
+        "size_parameter": 200000,
+        "elements": 400000,
+        "shape": [
+          200000,
+          2
+        ],
+        "input_c_contiguous": false,
+        "median_seconds": 0.15317490999950678,
+        "times_seconds": [
+          0.14959541999996873,
+          0.15699563800080796,
+          0.1495091130018409,
+          0.17835752699829754,
+          0.15317490999950678
+        ],
+        "tracemalloc_peak_bytes": 16094472,
+        "norms_hex": {
+          "l1": "0x1.8cbaa780033c6p+17",
+          "l2": "0x1.759bf0ca347b9p+8",
+          "linf": "0x1.2000000000000p+0"
+        }
+      },
+      {
+        "layout": "profile",
+        "size_parameter": 1000000,
+        "elements": 1000000,
+        "shape": [
+          1000000
+        ],
+        "input_c_contiguous": true,
+        "median_seconds": 0.389409004998015,
+        "times_seconds": [
+          0.3851292690014816,
+          0.389409004998015,
+          0.3896433010013425,
+          0.3912477379999473,
+          0.38461012599873357
+        ],
+        "tracemalloc_peak_bytes": 40450528,
+        "norms_hex": {
+          "l1": "0x1.e84820000218dp+18",
+          "l2": "0x1.20ace88a18006p+9",
+          "linf": "0x1.0000000000000p+0"
+        }
+      },
+      {
+        "layout": "strided-field",
+        "size_parameter": 1000000,
+        "elements": 2000000,
+        "shape": [
+          1000000,
+          2
+        ],
+        "input_c_contiguous": false,
+        "median_seconds": 0.7924745380005334,
+        "times_seconds": [
+          0.7949666750027973,
+          0.7766085980001662,
+          0.7858581979999144,
+          0.7924745380005334,
+          0.7945611639988783
+        ],
+        "tracemalloc_peak_bytes": 81130088,
+        "norms_hex": {
+          "l1": "0x1.efe929e000297p+19",
+          "l2": "0x1.a1b5093390a5bp+9",
+          "linf": "0x1.2000000000000p+0"
+        }
+      }
+    ]
+  },
+  "candidate": {
+    "pvs_version": "0.2.7",
+    "python": "3.12.3",
+    "numpy": "2.2.6",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "timing_repeats": 5,
+    "timing_method": "Median of independent calls after one untimed warm-up per workload",
+    "memory_method": "Separate tracemalloc call; inputs allocated before tracing; not RSS",
+    "qualification": "Local microbenchmark, not production performance qualification",
+    "results": [
+      {
+        "layout": "profile",
+        "size_parameter": 64,
+        "elements": 64,
+        "shape": [
+          64
+        ],
+        "input_c_contiguous": true,
+        "median_seconds": 3.346900120959617e-05,
+        "times_seconds": [
+          4.1371000406797975e-05,
+          3.4812001104000956e-05,
+          3.273800030001439e-05,
+          3.2357998861698434e-05,
+          3.346900120959617e-05
+        ],
+        "tracemalloc_peak_bytes": 4792,
+        "norms_hex": {
+          "l1": "0x1.0410410410410p+5",
+          "l2": "0x1.2c424061f3c28p+2",
+          "linf": "0x1.0000000000000p+0"
+        }
+      },
+      {
+        "layout": "strided-field",
+        "size_parameter": 64,
+        "elements": 128,
+        "shape": [
+          64,
+          2
+        ],
+        "input_c_contiguous": false,
+        "median_seconds": 3.643300078692846e-05,
+        "times_seconds": [
+          8.477499795844778e-05,
+          4.0118997276294976e-05,
+          3.604299854487181e-05,
+          3.643300078692846e-05,
+          3.534200004651211e-05
+        ],
+        "tracemalloc_peak_bytes": 5768,
+        "norms_hex": {
+          "l1": "0x1.053d3d3d3d3d4p+6",
+          "l2": "0x1.adedf2bafcb77p+2",
+          "linf": "0x1.2000000000000p+0"
+        }
+      },
+      {
+        "layout": "profile",
+        "size_parameter": 200000,
+        "elements": 200000,
+        "shape": [
+          200000
+        ],
+        "input_c_contiguous": true,
+        "median_seconds": 0.01700748800067231,
+        "times_seconds": [
+          0.018431579999742098,
+          0.017177898000227287,
+          0.01700748800067231,
+          0.016607961002591765,
+          0.01669959600258153
+        ],
+        "tracemalloc_peak_bytes": 3402082,
+        "norms_hex": {
+          "l1": "0x1.86a0800029f17p+16",
+          "l2": "0x1.02333f0b985d8p+8",
+          "linf": "0x1.0000000000000p+0"
+        }
+      },
+      {
+        "layout": "strided-field",
+        "size_parameter": 200000,
+        "elements": 400000,
+        "shape": [
+          200000,
+          2
+        ],
+        "input_c_contiguous": false,
+        "median_seconds": 0.0340019069990376,
+        "times_seconds": [
+          0.0340019069990376,
+          0.03354173000116134,
+          0.03433062499971129,
+          0.033679979002045,
+          0.035462096999253845
+        ],
+        "tracemalloc_peak_bytes": 6802034,
+        "norms_hex": {
+          "l1": "0x1.8cbaa780033c6p+17",
+          "l2": "0x1.759bf0ca347b9p+8",
+          "linf": "0x1.2000000000000p+0"
+        }
+      },
+      {
+        "layout": "profile",
+        "size_parameter": 1000000,
+        "elements": 1000000,
+        "shape": [
+          1000000
+        ],
+        "input_c_contiguous": true,
+        "median_seconds": 0.08111978200031444,
+        "times_seconds": [
+          0.07907204300136073,
+          0.08037457699902006,
+          0.08111978200031444,
+          0.08209314299892867,
+          0.08227653100038879
+        ],
+        "tracemalloc_peak_bytes": 17002082,
+        "norms_hex": {
+          "l1": "0x1.e84820000218dp+18",
+          "l2": "0x1.20ace88a18006p+9",
+          "linf": "0x1.0000000000000p+0"
+        }
+      },
+      {
+        "layout": "strided-field",
+        "size_parameter": 1000000,
+        "elements": 2000000,
+        "shape": [
+          1000000,
+          2
+        ],
+        "input_c_contiguous": false,
+        "median_seconds": 0.17246450600214303,
+        "times_seconds": [
+          0.1584963159984909,
+          0.17104560100051458,
+          0.17246450600214303,
+          0.17526013699898613,
+          0.21826635300021735
+        ],
+        "tracemalloc_peak_bytes": 34002034,
+        "norms_hex": {
+          "l1": "0x1.efe929e000297p+19",
+          "l2": "0x1.a1b5093390a5bp+9",
+          "linf": "0x1.2000000000000p+0"
+        }
+      }
+    ]
+  },
+  "comparison": [
+    {
+      "layout": "profile",
+      "elements": 64,
+      "norms_exactly_equal": true,
+      "runtime_ratio_027_over_026": 0.8179130270579562,
+      "traced_peak_ratio_027_over_026": 1.085144927536232
+    },
+    {
+      "layout": "strided-field",
+      "elements": 128,
+      "norms_exactly_equal": true,
+      "runtime_ratio_027_over_026": 0.5453388995005076,
+      "traced_peak_ratio_027_over_026": 0.8258877434135166
+    },
+    {
+      "layout": "profile",
+      "elements": 200000,
+      "norms_exactly_equal": true,
+      "runtime_ratio_027_over_026": 0.22199237708615346,
+      "traced_peak_ratio_027_over_026": 0.42389023675480847
+    },
+    {
+      "layout": "strided-field",
+      "elements": 400000,
+      "norms_exactly_equal": true,
+      "runtime_ratio_027_over_026": 0.22198091710415946,
+      "traced_peak_ratio_027_over_026": 0.42263169615008184
+    },
+    {
+      "layout": "profile",
+      "elements": 1000000,
+      "norms_exactly_equal": true,
+      "runtime_ratio_027_over_026": 0.20831511587855536,
+      "traced_peak_ratio_027_over_026": 0.4203179251455012
+    },
+    {
+      "layout": "strided-field",
+      "elements": 2000000,
+      "norms_exactly_equal": true,
+      "runtime_ratio_027_over_026": 0.21762781986318777,
+      "traced_peak_ratio_027_over_026": 0.4191051043849478
+    }
+  ]
+}

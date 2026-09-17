@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "event_rate_per_m3_s": {
+      "additionalProperties": false,
+      "properties": {
+        "d_he3": {
+          "items": {
+            "exclusiveMinimum": 0,
+            "type": "number"
+          },
+          "maxItems": 10,
+          "minItems": 10,
+          "type": "array"
+        },
+        "dd_total": {
+          "items": {
+            "exclusiveMinimum": 0,
+            "type": "number"
+          },
+          "maxItems": 10,
+          "minItems": 10,
+          "type": "array"
+        },
+        "dt": {
+          "items": {
+            "exclusiveMinimum": 0,
+            "type": "number"
+          },
+          "maxItems": 10,
+          "minItems": 10,
+          "type": "array"
+        }
+      },
+      "required": [
+        "dt",
+        "dd_total",
+        "d_he3"
+      ],
+      "type": "object"
+    },
+    "mixtures": {
+      "const": {
+        "d_he3": {
+          "first_density_m3": 5e+19,
+          "first_species": "D",
+          "second_density_m3": 5e+19,
+          "second_species": "He3"
+        },
+        "dd_total": {
+          "first_density_m3": 1e+20,
+          "first_species": "D",
+          "second_density_m3": 1e+20,
+          "second_species": "D"
+        },
+        "dt": {
+          "first_density_m3": 5e+19,
+          "first_species": "D",
+          "second_density_m3": 5e+19,
+          "second_species": "T"
+        }
+      },
+      "type": "object"
+    },
+    "pack_version": {
+      "const": "1.0.0"
+    },
+    "reactivity_m3_s": {
+      "additionalProperties": false,
+      "properties": {
+        "d_he3": {
+          "items": {
+            "exclusiveMinimum": 0,
+            "type": "number"
+          },
+          "maxItems": 10,
+          "minItems": 10,
+          "type": "array"
+        },
+        "dd_total": {
+          "items": {
+            "exclusiveMinimum": 0,
+            "type": "number"
+          },
+          "maxItems": 10,
+          "minItems": 10,
+          "type": "array"
+        },
+        "dt": {
+          "items": {
+            "exclusiveMinimum": 0,
+            "type": "number"
+          },
+          "maxItems": 10,
+          "minItems": 10,
+          "type": "array"
+        }
+      },
+      "required": [
+        "dt",
+        "dd_total",
+        "d_he3"
+      ],
+      "type": "object"
+    },
+    "schema": {
+      "const": "pvs-fusion-reactivity-values/1"
+    },
+    "temperature_keV": {
+      "const": [
+        1.0,
+        2.0,
+        5.0,
+        10.0,
+        20.0,
+        50.0,
+        100.0,
+        200.0,
+        500.0,
+        1000.0
+      ],
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "pack_version",
+    "temperature_keV",
+    "mixtures",
+    "reactivity_m3_s",
+    "event_rate_per_m3_s"
+  ],
+  "title": "NRL fusion table adapter output, case 1.0.0",
+  "type": "object"
+}

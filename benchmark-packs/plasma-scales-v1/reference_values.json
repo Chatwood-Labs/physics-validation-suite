@@ -1,0 +1,41 @@
+{
+  "schema": "pvs-plasma-scales-values/1",
+  "points": {
+    "low_density": {
+      "electron_debye_length_m": 2.350818870479394e-05,
+      "electron_plasma_angular_frequency_rad_s": 56414602254.295,
+      "deuteron_plasma_angular_frequency_rad_s": 931172033.3264636,
+      "deuteron_cyclotron_angular_frequency_rad_s": 4791794.496423159,
+      "deuteron_thermal_speed_m_s": 15478.686146477612,
+      "deuteron_thermal_gyroradius_m": 0.003230248325138254,
+      "alfven_speed_m_s": 1542726.5842391013,
+      "total_plasma_beta": 0.0006040063610955661,
+      "electron_inertial_length_m": 0.005314093266999432,
+      "exb_drift_y_m_s": -1000.0
+    },
+    "intermediate": {
+      "electron_debye_length_m": 2.350818870479394e-05,
+      "electron_plasma_angular_frequency_rad_s": 178398636416.04178,
+      "deuteron_plasma_angular_frequency_rad_s": 2944624518.7618413,
+      "deuteron_cyclotron_angular_frequency_rad_s": 47917944.96423159,
+      "deuteron_thermal_speed_m_s": 69222.78885181641,
+      "deuteron_thermal_gyroradius_m": 0.0014446109678427957,
+      "alfven_speed_m_s": 4878529.813087182,
+      "total_plasma_beta": 0.0008053418147940881,
+      "electron_inertial_length_m": 0.00168046384222835,
+      "exb_drift_y_m_s": -2000.0
+    },
+    "high_density": {
+      "electron_debye_length_m": 2.350818870479394e-05,
+      "electron_plasma_angular_frequency_rad_s": 564146022542.95,
+      "deuteron_plasma_angular_frequency_rad_s": 9311720333.264635,
+      "deuteron_cyclotron_angular_frequency_rad_s": 239589724.82115796,
+      "deuteron_thermal_speed_m_s": 154786.86146477613,
+      "deuteron_thermal_gyroradius_m": 0.0006460496650276508,
+      "alfven_speed_m_s": 7713632.921195507,
+      "total_plasma_beta": 0.0024160254443822645,
+      "electron_inertial_length_m": 0.0005314093266999432,
+      "exb_drift_y_m_s": -3000.0
+    }
+  }
+}

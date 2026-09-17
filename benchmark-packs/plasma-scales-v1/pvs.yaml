@@ -1,0 +1,553 @@
+schema: pvs-case/2
+id: plasma-scales-v1
+version: 1.0.0
+title: Classical deuterium plasma characteristic scales
+description: Thirty independently derived SI scalar references at three declared deuterium states.
+  A reference-equation verification example, not experimental validation.
+classifications:
+- verification
+- regression
+subject:
+  name: standalone-plasma-scales-derivation
+  version: 1.0.0
+  description: Standard-library Python evaluation of the declared public equations and CODATA 2022
+    central constants.
+execution:
+  command:
+  - python
+  - derive_values.py
+  - --output
+  - derived_values.json
+  working_directory: .
+  timeout_seconds: 30
+  environment:
+    PYTHONHASHSEED: '0'
+  expected_exit_codes:
+  - 0
+artifacts:
+  derivation-source:
+    path: derive_values.py
+    role: subject
+    format: text
+    expected_sha256: 96a1238ffc654ee6f8bbaddd18b1a3327914d4c678cbc874a368a57e0f636f81
+  independent-calculation:
+    path: independent_reference.py
+    role: reference
+    format: text
+    expected_sha256: 50561be93b50d35a460a9f276905c0ab9204c147fc4687fb87257149a7a5406a
+  frozen-values:
+    path: reference_values.json
+    role: reference
+    format: json
+    expected_sha256: 2fe31af33e3fd16a104095242d2c4ccf655bc44062a6c087762727ea765e5737
+  values-schema:
+    path: reference_values.schema.json
+    role: reference
+    format: json
+    expected_sha256: 41ae6210705a70652c9629fd1b82aeb44beb423f249c40df106ed58e3cd99479
+  source-manifest:
+    path: source_manifest.json
+    role: reference
+    format: json
+    expected_sha256: efa0e471217bd72635f3e375de561f488b07bf1408cf9e02be871fc7d0027fca
+  derived-values:
+    path: derived_values.json
+    role: output
+    format: json
+references:
+- id: nrl-2023
+  type: published
+  citation: A. Beresnyak, 2023 NRL Plasma Formulary, Naval Research Laboratory (2023).
+  locator: https://www.nrl.navy.mil/Portals/38/PDF%20Files/NRL_Plasma_Formulary_2023.pdf
+  artifact: frozen-values
+  source_location: 'Printed p.18 (PDF page19): Gaussian-to-SI conversion; Printed p.19 (PDF page20):
+    SI Lorentz force; Printed p.28 (PDF page29): frequencies and lengths; Printed p.29 (PDF page30):
+    thermal/Alfven velocities, beta, magnetic pressure'
+  accessed_utc: '2026-09-14'
+  notes: Source PDF identified by exact SHA-256 in source_manifest.json; publication is not redistributed.
+    References are calculated from equations and selected central constants, not measurements.
+- id: codata-2022
+  type: published
+  citation: 'P. J. Mohr, D. B. Newell, B. N. Taylor and E. Tiesinga, CODATA recommended values of
+    the fundamental physical constants: 2022, JPCRD 54, 033105 (2025).'
+  locator: https://physics.nist.gov/cuu/pdf/JPCRD2022CODATA.pdf
+  artifact: frozen-values
+  source_location: 'Table XXXII, printed 033105-44: c, e, me, epsilon0, mu0; Table XXXIII, printed
+    033105-48: deuteron mass'
+  accessed_utc: '2026-09-14'
+  notes: Source PDF identified by exact SHA-256 in source_manifest.json; publication is not redistributed.
+    References are calculated from equations and selected central constants, not measurements.
+checks:
+- id: derived-output-exists
+  type: exists
+  artifact: derived-values
+- id: derived-output-schema
+  type: schema
+  artifact: derived-values
+  schema_artifact: values-schema
+- id: frozen-reference-schema
+  type: schema
+  artifact: frozen-values
+  schema_artifact: values-schema
+- id: low-density-electron-debye-length-m
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/low_density/electron_debye_length_m
+    unit: m
+  expected:
+    artifact: frozen-values
+    pointer: /points/low_density/electron_debye_length_m
+    unit: m
+  unit: m
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: low-density-electron-plasma-angular-frequency-rad-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/low_density/electron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/low_density/electron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  unit: rad s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: low-density-deuteron-plasma-angular-frequency-rad-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/low_density/deuteron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/low_density/deuteron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  unit: rad s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: low-density-deuteron-cyclotron-angular-frequency-rad-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/low_density/deuteron_cyclotron_angular_frequency_rad_s
+    unit: rad s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/low_density/deuteron_cyclotron_angular_frequency_rad_s
+    unit: rad s^-1
+  unit: rad s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: low-density-deuteron-thermal-speed-m-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/low_density/deuteron_thermal_speed_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/low_density/deuteron_thermal_speed_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: low-density-deuteron-thermal-gyroradius-m
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/low_density/deuteron_thermal_gyroradius_m
+    unit: m
+  expected:
+    artifact: frozen-values
+    pointer: /points/low_density/deuteron_thermal_gyroradius_m
+    unit: m
+  unit: m
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: low-density-alfven-speed-m-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/low_density/alfven_speed_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/low_density/alfven_speed_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: low-density-total-plasma-beta
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/low_density/total_plasma_beta
+    unit: '1'
+  expected:
+    artifact: frozen-values
+    pointer: /points/low_density/total_plasma_beta
+    unit: '1'
+  unit: '1'
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: low-density-electron-inertial-length-m
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/low_density/electron_inertial_length_m
+    unit: m
+  expected:
+    artifact: frozen-values
+    pointer: /points/low_density/electron_inertial_length_m
+    unit: m
+  unit: m
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: low-density-exb-drift-y-m-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/low_density/exb_drift_y_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/low_density/exb_drift_y_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: intermediate-electron-debye-length-m
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/intermediate/electron_debye_length_m
+    unit: m
+  expected:
+    artifact: frozen-values
+    pointer: /points/intermediate/electron_debye_length_m
+    unit: m
+  unit: m
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: intermediate-electron-plasma-angular-frequency-rad-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/intermediate/electron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/intermediate/electron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  unit: rad s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: intermediate-deuteron-plasma-angular-frequency-rad-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/intermediate/deuteron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/intermediate/deuteron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  unit: rad s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: intermediate-deuteron-cyclotron-angular-frequency-rad-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/intermediate/deuteron_cyclotron_angular_frequency_rad_s
+    unit: rad s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/intermediate/deuteron_cyclotron_angular_frequency_rad_s
+    unit: rad s^-1
+  unit: rad s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: intermediate-deuteron-thermal-speed-m-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/intermediate/deuteron_thermal_speed_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/intermediate/deuteron_thermal_speed_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: intermediate-deuteron-thermal-gyroradius-m
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/intermediate/deuteron_thermal_gyroradius_m
+    unit: m
+  expected:
+    artifact: frozen-values
+    pointer: /points/intermediate/deuteron_thermal_gyroradius_m
+    unit: m
+  unit: m
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: intermediate-alfven-speed-m-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/intermediate/alfven_speed_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/intermediate/alfven_speed_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: intermediate-total-plasma-beta
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/intermediate/total_plasma_beta
+    unit: '1'
+  expected:
+    artifact: frozen-values
+    pointer: /points/intermediate/total_plasma_beta
+    unit: '1'
+  unit: '1'
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: intermediate-electron-inertial-length-m
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/intermediate/electron_inertial_length_m
+    unit: m
+  expected:
+    artifact: frozen-values
+    pointer: /points/intermediate/electron_inertial_length_m
+    unit: m
+  unit: m
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: intermediate-exb-drift-y-m-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/intermediate/exb_drift_y_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/intermediate/exb_drift_y_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: high-density-electron-debye-length-m
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/high_density/electron_debye_length_m
+    unit: m
+  expected:
+    artifact: frozen-values
+    pointer: /points/high_density/electron_debye_length_m
+    unit: m
+  unit: m
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: high-density-electron-plasma-angular-frequency-rad-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/high_density/electron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/high_density/electron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  unit: rad s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: high-density-deuteron-plasma-angular-frequency-rad-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/high_density/deuteron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/high_density/deuteron_plasma_angular_frequency_rad_s
+    unit: rad s^-1
+  unit: rad s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: high-density-deuteron-cyclotron-angular-frequency-rad-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/high_density/deuteron_cyclotron_angular_frequency_rad_s
+    unit: rad s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/high_density/deuteron_cyclotron_angular_frequency_rad_s
+    unit: rad s^-1
+  unit: rad s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: high-density-deuteron-thermal-speed-m-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/high_density/deuteron_thermal_speed_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/high_density/deuteron_thermal_speed_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: high-density-deuteron-thermal-gyroradius-m
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/high_density/deuteron_thermal_gyroradius_m
+    unit: m
+  expected:
+    artifact: frozen-values
+    pointer: /points/high_density/deuteron_thermal_gyroradius_m
+    unit: m
+  unit: m
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: high-density-alfven-speed-m-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/high_density/alfven_speed_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/high_density/alfven_speed_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: high-density-total-plasma-beta
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/high_density/total_plasma_beta
+    unit: '1'
+  expected:
+    artifact: frozen-values
+    pointer: /points/high_density/total_plasma_beta
+    unit: '1'
+  unit: '1'
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: high-density-electron-inertial-length-m
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/high_density/electron_inertial_length_m
+    unit: m
+  expected:
+    artifact: frozen-values
+    pointer: /points/high_density/electron_inertial_length_m
+    unit: m
+  unit: m
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: high-density-exb-drift-y-m-s
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /points/high_density/exb_drift_y_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /points/high_density/exb_drift_y_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+package:
+  embed_artifacts: true
+  html: true
+  pdf: true
+metadata:
+  data_kind: independently-derived-reference-values
+  reference_scalar_count: 30
+  scope: Classical scale calculation and adapter example; no external solver or experimental measurement
+    is tested.
+  tolerance_policy: Relative 2e-14 tests numerical reproduction, not scientific/model uncertainty.
+  limitations: Three chosen fully ionized D states; per-quantity conventions and applicability in
+    source_manifest.json.

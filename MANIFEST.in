@@ -1,0 +1,14 @@
+include README.md BUNDLE_README.md LICENSE NOTICE CITATION.cff CONTRIBUTING.md SECURITY.md uv.lock
+include build_backend.py setup.py .gitattributes
+include test-pvs.ps1 test-pvs.sh
+recursive-include tools *.py
+recursive-include .github/workflows *.yml *.yaml
+recursive-include schemas *.json
+recursive-include docs *.md *.json
+recursive-include examples *.yaml *.json *.csv *.py *.md *.inp
+recursive-include benchmark-packs *.yaml *.json *.py *.md
+recursive-include src/pvs/schemas *.json
+recursive-include tests *.py
+recursive-include tests/fixtures *.zip *.json *.md *.yaml
+prune **/__pycache__
+global-exclude *.py[cod]

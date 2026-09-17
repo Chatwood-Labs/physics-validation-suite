@@ -1,0 +1,161 @@
+{
+  "schema": "pvs-published-table-anchors/1",
+  "spitzer_harm_1953_table_iii": {
+    "columns": [
+      "z",
+      "gamma_e",
+      "gamma_t",
+      "delta_e",
+      "delta_t",
+      "epsilon"
+    ],
+    "rows": [
+      [
+        1.0,
+        0.5816,
+        0.2727,
+        0.4652,
+        0.2252,
+        0.4189
+      ],
+      [
+        2.0,
+        0.6833,
+        0.4137,
+        0.5787,
+        0.3563,
+        0.41
+      ],
+      [
+        4.0,
+        0.7849,
+        0.5714,
+        0.7043,
+        0.5133,
+        0.4007
+      ],
+      [
+        16.0,
+        0.9225,
+        0.8279,
+        0.887,
+        0.7907,
+        0.3959
+      ]
+    ],
+    "interpretation": "Direct transcription. Half the last printed decimal unit is 5e-5; this describes source precision, not an active equation-comparison tolerance or model uncertainty."
+  },
+  "evans_1973_table_i": {
+    "interpretation": "Instantaneous differential ion energy-loss fraction dE_i/dE, not an integrated birth-to-thermal fraction.",
+    "equal_stopping_energy_mev": {
+      "5_keV": 0.25,
+      "50_keV": 2.2,
+      "100_keV": 4.3
+    },
+    "rows": {
+      "5_keV": [
+        [
+          0.05,
+          0.92
+        ],
+        [
+          0.25,
+          0.5
+        ],
+        [
+          0.5,
+          0.26
+        ],
+        [
+          1.0,
+          0.11
+        ],
+        [
+          1.5,
+          0.06
+        ],
+        [
+          2.5,
+          0.03
+        ],
+        [
+          3.5,
+          0.02
+        ]
+      ],
+      "50_keV": [
+        [
+          0.25,
+          0.96
+        ],
+        [
+          0.5,
+          0.9
+        ],
+        [
+          1.0,
+          0.76
+        ],
+        [
+          1.5,
+          0.64
+        ],
+        [
+          2.5,
+          0.45
+        ],
+        [
+          3.5,
+          0.33
+        ]
+      ],
+      "100_keV": [
+        [
+          0.25,
+          0.99
+        ],
+        [
+          0.5,
+          0.96
+        ],
+        [
+          1.0,
+          0.9
+        ],
+        [
+          1.5,
+          0.83
+        ],
+        [
+          2.5,
+          0.69
+        ],
+        [
+          3.5,
+          0.57
+        ]
+      ]
+    },
+    "source_location": "Table I, printed p. 5; PDF physical page 8 (zero-based page index 7)",
+    "review_method": "Visual inspection of the official scanned page on 2026-09-14; not OCR-only transcription.",
+    "transcription_history": {
+      "corrected_utc": "2026-09-14",
+      "classification": "prior-pack-ocr-transcription-error",
+      "note": "The original publication prints 0.45 and 0.83. Earlier pack revisions misread OCR as 0.65 and 0.63 and incorrectly attributed anomalies to the publication. These were pack transcription errors, not published misprints.",
+      "corrections": [
+        {
+          "temperature_kev": 50.0,
+          "energy_mev": 2.5,
+          "prior_pack_ocr_fraction": 0.65,
+          "visually_verified_printed_fraction": 0.45
+        },
+        {
+          "temperature_kev": 100.0,
+          "energy_mev": 1.5,
+          "prior_pack_ocr_fraction": 0.63,
+          "visually_verified_printed_fraction": 0.83
+        }
+      ]
+    }
+  }
+}

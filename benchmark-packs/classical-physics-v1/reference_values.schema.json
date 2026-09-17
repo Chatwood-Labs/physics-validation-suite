@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "oscillator",
+    "heat",
+    "kepler"
+  ],
+  "properties": {
+    "schema": {
+      "const": "pvs-classical-physics-values/1"
+    },
+    "oscillator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mass_kg",
+        "spring_constant_n_m",
+        "amplitude_m",
+        "time_s",
+        "position_m",
+        "velocity_m_s",
+        "total_energy_j"
+      ],
+      "properties": {
+        "mass_kg": {
+          "const": 2.0
+        },
+        "spring_constant_n_m": {
+          "const": 8.0
+        },
+        "amplitude_m": {
+          "const": 0.25
+        },
+        "time_s": {
+          "const": [
+            0.0,
+            0.5,
+            1.0,
+            2.0,
+            3.0
+          ]
+        },
+        "position_m": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "number"
+          }
+        },
+        "velocity_m_s": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "number"
+          }
+        },
+        "total_energy_j": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "heat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "length_m",
+        "diffusivity_m2_s",
+        "initial_amplitude_k",
+        "time_s",
+        "position_m",
+        "temperature_excess_k"
+      ],
+      "properties": {
+        "length_m": {
+          "const": 1.0
+        },
+        "diffusivity_m2_s": {
+          "const": 0.1
+        },
+        "initial_amplitude_k": {
+          "const": 10.0
+        },
+        "time_s": {
+          "const": [
+            0.0,
+            0.5,
+            2.0
+          ]
+        },
+        "position_m": {
+          "const": [
+            0.0,
+            0.25,
+            0.5,
+            0.75,
+            1.0
+          ]
+        },
+        "temperature_excess_k": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "array",
+            "minItems": 5,
+            "maxItems": 5,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "kepler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gravitational_parameter_m3_s2",
+        "radius_m",
+        "circular_speed_m_s",
+        "orbital_period_s"
+      ],
+      "properties": {
+        "gravitational_parameter_m3_s2": {
+          "const": 1.0
+        },
+        "radius_m": {
+          "const": [
+            1.0,
+            4.0,
+            9.0
+          ]
+        },
+        "circular_speed_m_s": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "number"
+          }
+        },
+        "orbital_period_s": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

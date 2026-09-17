@@ -1,0 +1,48 @@
+{
+  "version": "0.3.0",
+  "host": "Linux x86_64/glibc",
+  "python": "3.12.3",
+  "numpy": "2.2.6",
+  "pytest": "8.3.5",
+  "frozen_suite": {
+    "passed": 1095,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "exclusions": [],
+    "seconds": 168.295
+  },
+  "ruff": "passed",
+  "mypy": {
+    "mypy-linux.log": "Success: no issues found in 52 source files",
+    "mypy-macos.log": "Success: no issues found in 52 source files",
+    "mypy-python310.log": "Success: no issues found in 52 source files",
+    "mypy-windows.log": "Success: no issues found in 52 source files"
+  },
+  "lock_check": "passed",
+  "shell_syntax": "passed",
+  "baseline_bundle_sha256": "f88f2fc9663483a5f7d7dfb8dabcac4c27a32ffe78d6440ce5133c2105598c7f",
+  "review_test_origin": "Reconstructed five cases from supplied review; no new review test file was attached.",
+  "review_tests_sha256": "48f92d48f7b2b609e89d33b1d510698c72a6d2593b4e504de34a588f7b0b7865",
+  "baseline_wheel_review_suite": {
+    "tests": 20,
+    "passed": 17,
+    "failed": 3,
+    "notes": "Only the three newly reconstructed contradiction assertions fail."
+  },
+  "unchanged_contracts": [
+    "pvs-case/2",
+    "pvs-evidence/3",
+    "pvs-manifest/3",
+    "pvs-html/3",
+    "pvs-pdf/3",
+    "pvs-comparison/2",
+    "pvs-binary64-norm/1",
+    "pvs-finding-projection/1"
+  ],
+  "limitations": [
+    "Native Windows and macOS runtime qualification has not been performed for 0.3.0.",
+    "Host rebuild reproducibility is not a cross-host reproducibility claim.",
+    "Norm envelopes are necessary consistency conditions, not a complete inverse-realizability test."
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "pvs-physics-source-manifest/1",
+  "audited_utc": "2026-09-14",
+  "sources": {
+    "nrl-2023": {
+      "citation": "A. Beresnyak, 2023 NRL Plasma Formulary, Naval Research Laboratory (2023).",
+      "primary_locator": "https://www.nrl.navy.mil/Portals/38/PDF%20Files/NRL_Plasma_Formulary_2023.pdf",
+      "sha256": "1a13dc8f0a1e493806adde235b22ccdd80eed939936a4622b36d0b563bea2596",
+      "size_bytes": 1270350,
+      "hash_scope": "Exact official NRL PDF bytes; source is identified but not redistributed.",
+      "locations": [
+        "p. 28: electron collision frequency",
+        "pp. 33-34: thermal equilibration and electron-ion Coulomb logarithm",
+        "p. 58 Eq. (30): bremsstrahlung"
+      ],
+      "status": "source-byte-identified"
+    },
+    "bosch-hale-1992": {
+      "citation": "H.-S. Bosch and G. M. Hale, Improved formulas for fusion cross-sections and thermal reactivities, Nuclear Fusion 32, 611-631 (1992).",
+      "doi": "10.1088/0029-5515/32/4/I07",
+      "primary_locator": "https://doi.org/10.1088/0029-5515/32/4/I07",
+      "official_metadata_locator": "https://www.osti.gov/etdeweb/biblio/5161054",
+      "erratum_doi": "10.1088/0029-5515/33/12/513",
+      "sha256": "0770dd18e3c91741cbe6ac8837f8a0ab8e54d4fbcbfca868ba8eaac47ac9e38e",
+      "size_bytes": 1716723,
+      "locations": [
+        "Eqs. (12)-(14), p. 624: Maxwellian thermal reactivity fit",
+        "Table VII, p. 625: D-T coefficients and validity range",
+        "Table VIII, p. 625: selected reactivity values"
+      ],
+      "status": "1992-reviewed-copy-byte-identified-erratum-unreviewed",
+      "limitation": "The 1992 article equations and D-T coefficients were visually checked against the identified journal scan. The separate 1993 erratum could not be retrieved; this release reproduces the identified 1992 equations and does not claim qualification against all published corrections.",
+      "reviewed_copy_locator": "https://raw.githubusercontent.com/ThePolywellGuy/Polywell-Papers/master/1992%20-%20Max%20Planc%20-%20Improved%20formulas%20for%20fusion%20cross%20sections%20and%20thermal%20reactivities%20-%20BOSCH%2C%20HALE.pdf",
+      "hash_scope": "Exact reviewed journal-scan reproduction bytes from the listed mirror; not a publisher-hosted file; source is not redistributed."
+    },
+    "spitzer-harm-1953": {
+      "citation": "L. Spitzer Jr. and R. Harm, Transport Phenomena in a Completely Ionized Gas, Physical Review 89, 977-981 (1953).",
+      "doi": "10.1103/PhysRev.89.977",
+      "primary_locator": "https://doi.org/10.1103/PhysRev.89.977",
+      "reviewed_copy_locator": "https://ayuba.fr/pdf/spitzer1953.pdf",
+      "sha256": "a593b841b5a1b4507777dba7dc1654a2cff81a2534d8b27b88e4357ad0f05f7b",
+      "size_bytes": 448966,
+      "hash_scope": "Exact reviewed reproduction bytes, not an APS-hosted source file; source is not redistributed.",
+      "locations": [
+        "Table III, p. 980"
+      ],
+      "status": "reviewed-copy-byte-identified"
+    },
+    "evans-1973": {
+      "citation": "F. Evans, Note on the Calculation of Energy Deposition of Alpha Particles in a DT Plasma by Rutherford Scattering, LA-5448-MS (1973).",
+      "doi": "10.2172/4398792",
+      "primary_locator": "https://www.osti.gov/biblio/4398792",
+      "full_text_locator": "https://www.osti.gov/servlets/purl/4398792",
+      "sha256": "5428660155573d032800cbf4697a103d8e6e1cb25d165f1bd92e8932e2cebb42",
+      "size_bytes": 337227,
+      "locations": [
+        "Table I, printed p. 5; PDF physical page 8 (zero-based page index 7)",
+        "Eq. (27a), printed p. 4; PDF physical page 7: electron/ion stopping ratio"
+      ],
+      "status": "official-source-byte-identified-visually-transcribed",
+      "hash_scope": "Exact official OSTI PDF bytes; source is identified but not redistributed.",
+      "transcription_note": "The actual table prints 0.45 and 0.83. Older pack revisions mistook OCR output 0.65/0.63 for published values. See the explicit pack-transcription correction history in published_table_anchors.json."
+    },
+    "codata-2022": {
+      "citation": "P. J. Mohr, D. B. Newell, B. N. Taylor and E. Tiesinga, CODATA recommended values of the fundamental physical constants: 2022, Journal of Physical and Chemical Reference Data 54, 033105 (2025); NIST database Version 9.0.",
+      "doi": "10.1063/5.0279860",
+      "related_review_doi": "10.1103/RevModPhys.97.025002",
+      "primary_locator": "https://physics.nist.gov/cuu/Constants/",
+      "pdf_locator": "https://physics.nist.gov/cuu/pdf/JPCRD2022CODATA.pdf",
+      "sha256": "4d7e7f34b98ab2fc4df68b38247f818f6fc8bdf7f25f91abcdfbc329e22d2f32",
+      "size_bytes": 5920363,
+      "hash_scope": "Exact official NIST JPCRD PDF bytes; source is identified but not redistributed.",
+      "status": "source-byte-identified"
+    }
+  },
+  "claim_boundary": "This manifest identifies reviewed sources, source copies and unresolved limitations; publications are not redistributed. Bosch-Hale covers the reviewed 1992 edition, with its erratum unreviewed. Numeric regression PASS does not remove that limitation."
+}

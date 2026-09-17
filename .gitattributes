@@ -1,0 +1,8 @@
+# PVS pins source, schema and reference bytes; checkout must preserve LF.
+* text=auto eol=lf
+
+# Preserve archive and report bytes without line-ending conversion.
+*.zip -text
+*.whl -text
+*.gz -text
+*.pdf -text

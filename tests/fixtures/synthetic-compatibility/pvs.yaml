@@ -1,0 +1,51 @@
+schema: pvs-case/2
+id: synthetic-json-compatibility
+version: 1.0.0
+title: Synthetic JSON format compatibility fixture
+description: >-
+  Newly generated software-test fixture using deliberately synthetic dimensionless
+  values. It contains no physical measurements or published physics benchmarks.
+classifications: [verification, regression]
+subject:
+  name: synthetic-json-fixture
+  version: 1.0.0
+  description: Deliberately synthetic values used to exercise evidence format compatibility.
+artifacts:
+  result:
+    path: result.json
+    role: output
+    format: json
+  expected:
+    path: expected.json
+    role: reference
+    format: json
+references:
+  - id: synthetic-fixture
+    type: canonical-fixture
+    citation: Synthetic dimensionless values defined in this software-test fixture.
+    locator: Embedded expected.json
+    artifact: expected
+    notes: These values are test inputs, not external scientific evidence.
+checks:
+  - id: values-finite
+    type: finite
+    source: {artifact: result, pointer: /values, unit: '1'}
+    unit: '1'
+  - id: values-range
+    type: range
+    source: {artifact: result, pointer: /values, unit: '1'}
+    unit: '1'
+    minimum: 0.0
+    maximum: 1.0
+  - id: values-reference
+    type: reference
+    reference_id: synthetic-fixture
+    actual: {artifact: result, pointer: /values, unit: '1'}
+    expected: {artifact: expected, pointer: /values, unit: '1'}
+    unit: '1'
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 0.0
+package: {embed_artifacts: true, html: true, pdf: true}
+metadata:
+  fixture_scope: Newly generated synthetic compatibility fixture; not historical release output.

@@ -1,0 +1,273 @@
+schema: pvs-case/2
+id: classical-physics-analytical-v1
+version: 1.0.0
+title: 'Classical analytical benchmarks: oscillator, heat diffusion and circular orbit'
+description: Reproduce 36 independently frozen values for ideal problems. This demonstration verifies
+  equations, not a production solver or experiment.
+classifications:
+- verification
+- regression
+subject:
+  name: classical-analytical-demonstration
+  version: 1.0.0
+  description: Standard-library analytic equation evaluation; no production solver is executed.
+execution:
+  command:
+  - python
+  - derive_reference_values.py
+  - --output
+  - derived_values.json
+  working_directory: .
+  timeout_seconds: 30
+  environment:
+    PYTHONHASHSEED: '0'
+  expected_exit_codes:
+  - 0
+artifacts:
+  derivation-source:
+    path: derive_reference_values.py
+    role: subject
+    format: text
+    expected_sha256: 79552ca82d98df68c9beb02280aa4af91a96f874b5d65c655e336e8083613158
+  frozen-values:
+    path: reference_values.json
+    role: reference
+    format: json
+    expected_sha256: da209756a24cc7126b8584d7d0a87c83944c48a27604974da3df99c5a665c76d
+  values-schema:
+    path: reference_values.schema.json
+    role: reference
+    format: json
+    expected_sha256: a8828fd6d670bfa6feb357abbb56b85904ea34d79029889d23539b60e4923b8b
+  source-manifest:
+    path: source_manifest.json
+    role: reference
+    format: json
+    expected_sha256: ff1f4fb45c636d0f8cadcf1588e26c67f034417b73fdfe261ad6e8d50fe866be
+  independent-review:
+    path: verify_frozen_values.py
+    role: reference
+    format: text
+    expected_sha256: a61246cf23e43b8f05bba939b7b74ae5a318580883d54c1c1df8155aa5ee5333
+  derived-values:
+    path: derived_values.json
+    role: output
+    format: json
+references:
+- id: openstax-shm
+  type: published
+  citation: OpenStax, University Physics Volume 1, Section 15.1, Simple Harmonic Motion.
+  locator: https://openstax.org/books/university-physics-volume-1/pages/15-1-simple-harmonic-motion
+  source_location: 'Equations 15.3, 15.4 and 15.9: position, velocity, angular frequency.'
+  artifact: frozen-values
+  accessed_utc: '2026-09-14'
+  derivation: Analytical equations evaluated at explicitly chosen inputs; these targets are not transcribed
+    experimental data.
+- id: openstax-energy
+  type: published
+  citation: OpenStax, University Physics Volume 1, Section 15.2, Energy in Simple Harmonic Motion.
+  locator: https://openstax.org/books/university-physics-volume-1/pages/15-2-energy-in-simple-harmonic-motion
+  source_location: 'Equation 15.12: total mechanical energy.'
+  artifact: frozen-values
+  accessed_utc: '2026-09-14'
+  derivation: Analytical equations evaluated at explicitly chosen inputs; these targets are not transcribed
+    experimental data.
+- id: mit-heat
+  type: published
+  citation: Matthew J. Hancock, The 1-D Heat Equation, MIT 18.303 Linear Partial Differential Equations,
+    Fall 2006.
+  locator: https://ocw.mit.edu/courses/18-303-linear-partial-differential-equations-fall-2006/d11b374a85c3fde55ec971fe587f8a50_heateqni.pdf
+  source_location: 'Printed pp. 2-4 Eqs. (2), (4)-(7): physical equation, initial/boundary conditions
+    and scaling; pp. 6-7 Eqs. (18)-(20): separated sine-mode solution.'
+  artifact: frozen-values
+  accessed_utc: '2026-09-14'
+  derivation: Analytical equations evaluated at explicitly chosen inputs; these targets are not transcribed
+    experimental data.
+- id: nasa-kepler
+  type: published
+  citation: David P. Stern, Kepler's Third Law, NASA Goddard archival educational page, updated 2008-05-20.
+  locator: https://pwg.gsfc.nasa.gov/stargaze/Skepl3rd.htm
+  source_location: 'Section Kepler''s Third Law for Earth Satellites: V^2/r= g R_E^2/r^2; T^2=(4
+    pi^2/(g R_E^2)) r^3. Replace g R_E^2 by the prescribed gravitational parameter mu.'
+  artifact: frozen-values
+  accessed_utc: '2026-09-14'
+  derivation: Analytical equations evaluated at explicitly chosen inputs; these targets are not transcribed
+    experimental data.
+checks:
+- id: output-exists
+  type: exists
+  artifact: derived-values
+- id: output-schema
+  type: schema
+  artifact: derived-values
+  schema_artifact: values-schema
+- id: source-manifest-present
+  type: exists
+  artifact: source-manifest
+- id: oscillator-position-m-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /oscillator/position_m
+    unit: m
+  unit: m
+- id: oscillator-position-m-reference
+  type: reference
+  reference_id: openstax-shm
+  actual:
+    artifact: derived-values
+    pointer: /oscillator/position_m
+    unit: m
+  expected:
+    artifact: frozen-values
+    pointer: /oscillator/position_m
+    unit: m
+  unit: m
+  metric: close
+  absolute_tolerance: 1.0e-14
+  relative_tolerance: 2.0e-14
+- id: oscillator-velocity-m-s-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /oscillator/velocity_m_s
+    unit: m s^-1
+  unit: m s^-1
+- id: oscillator-velocity-m-s-reference
+  type: reference
+  reference_id: openstax-shm
+  actual:
+    artifact: derived-values
+    pointer: /oscillator/velocity_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /oscillator/velocity_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 1.0e-14
+  relative_tolerance: 2.0e-14
+- id: oscillator-total-energy-j-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /oscillator/total_energy_j
+    unit: J
+  unit: J
+- id: oscillator-total-energy-j-reference
+  type: reference
+  reference_id: openstax-energy
+  actual:
+    artifact: derived-values
+    pointer: /oscillator/total_energy_j
+    unit: J
+  expected:
+    artifact: frozen-values
+    pointer: /oscillator/total_energy_j
+    unit: J
+  unit: J
+  metric: close
+  absolute_tolerance: 1.0e-14
+  relative_tolerance: 2.0e-14
+- id: heat-temperature-excess-k-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /heat/temperature_excess_k
+    unit: K
+  unit: K
+- id: heat-temperature-excess-k-reference
+  type: reference
+  reference_id: mit-heat
+  actual:
+    artifact: derived-values
+    pointer: /heat/temperature_excess_k
+    unit: K
+  expected:
+    artifact: frozen-values
+    pointer: /heat/temperature_excess_k
+    unit: K
+  unit: K
+  metric: close
+  absolute_tolerance: 1.0e-12
+  relative_tolerance: 2.0e-14
+- id: kepler-circular-speed-m-s-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /kepler/circular_speed_m_s
+    unit: m s^-1
+  unit: m s^-1
+- id: kepler-circular-speed-m-s-reference
+  type: reference
+  reference_id: nasa-kepler
+  actual:
+    artifact: derived-values
+    pointer: /kepler/circular_speed_m_s
+    unit: m s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /kepler/circular_speed_m_s
+    unit: m s^-1
+  unit: m s^-1
+  metric: close
+  absolute_tolerance: 1.0e-14
+  relative_tolerance: 2.0e-14
+- id: kepler-orbital-period-s-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /kepler/orbital_period_s
+    unit: s
+  unit: s
+- id: kepler-orbital-period-s-reference
+  type: reference
+  reference_id: nasa-kepler
+  actual:
+    artifact: derived-values
+    pointer: /kepler/orbital_period_s
+    unit: s
+  expected:
+    artifact: frozen-values
+    pointer: /kepler/orbital_period_s
+    unit: s
+  unit: s
+  metric: close
+  absolute_tolerance: 1.0e-12
+  relative_tolerance: 2.0e-14
+- id: oscillator-nonnegative
+  type: range
+  source:
+    artifact: derived-values
+    pointer: /oscillator/total_energy_j
+    unit: J
+  unit: J
+  minimum: 0.0
+- id: heat-nonnegative
+  type: range
+  source:
+    artifact: derived-values
+    pointer: /heat/temperature_excess_k
+    unit: K
+  unit: K
+  minimum: 0.0
+- id: kepler-nonnegative
+  type: range
+  source:
+    artifact: derived-values
+    pointer: /kepler/orbital_period_s
+    unit: s
+  unit: s
+  minimum: 0.0
+package:
+  embed_artifacts: true
+  html: true
+  pdf: true
+metadata:
+  data_kind: analytical-verification-targets
+  scalar_target_count: 36
+  tolerance_policy: 2e-14 relative plus explicit absolute tolerance for floating-point roundoff,
+    including analytical zeros. Not model uncertainty or a mesh convergence acceptance criterion.
+  claim_boundary: Compare independently produced solver output to these frozen targets. The shipped
+    producer is a reproduction demonstration, not validation against measurements.

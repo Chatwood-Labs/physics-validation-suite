@@ -1,0 +1,98 @@
+{
+  "schema": "pvs-benchmark-catalog/1",
+  "counting_policy": "reference_value_count counts output scalar targets, excluding input coordinates, metadata and additional source-table anchors. Published tabulation conversions are not additional independent measurements.",
+  "packs": [
+    {
+      "id": "plasma-physics-reference-v1",
+      "directory": "plasma-physics-reference-v1",
+      "title": "Reviewed plasma reference equations and published tables",
+      "case_version": "3.0.0",
+      "data_kinds": [
+        "analytically-derived",
+        "published-tabulation",
+        "physical-constants"
+      ],
+      "reference_value_count": 52,
+      "check_count": 31,
+      "source_count": 5,
+      "primary_sources": [
+        "https://www.nrl.navy.mil/Portals/38/PDF%20Files/NRL_Plasma_Formulary_2023.pdf",
+        "https://doi.org/10.1088/0029-5515/32/4/I07",
+        "https://doi.org/10.1103/PhysRev.89.977",
+        "https://www.osti.gov/biblio/4398792",
+        "https://physics.nist.gov/cuu/Constants/"
+      ],
+      "admission_record": "source_manifest.json",
+      "scope": "Public plasma equations, selected published table anchors and physical constants.",
+      "limitations": "Reference derivation only; no production solver is executed. Bosch-Hale 1993 erratum remains unreviewed; regression tolerances are separate from physical uncertainty.",
+      "producer_script": "derive_reference_values.py",
+      "output": "derived_values.json"
+    },
+    {
+      "id": "fusion-reactivity-v1",
+      "directory": "fusion-reactivity-v1",
+      "title": "Published fusion data: SI conversion and event-rate normalisation",
+      "case_version": "1.0.0",
+      "data_kinds": [
+        "published-tabulation"
+      ],
+      "reference_value_count": 60,
+      "check_count": 21,
+      "source_count": 2,
+      "primary_sources": [
+        "https://www.nrl.navy.mil/Portals/38/PDF%20Files/NRL_Plasma_Formulary_2023.pdf",
+        "https://arxiv.org/abs/2212.01840v2"
+      ],
+      "admission_record": "source_manifest.json",
+      "scope": "Thirty NRL Maxwellian reactivities for DT, DD-total and D-He3, with thirty SI conversions and thirty event-rate targets.",
+      "limitations": "The producer reads the published table and checks conversion and pair counting. It does not independently predict reactivity; DD branches are not resolved and chosen densities are not measurements.",
+      "producer_script": "convert_reference_table.py",
+      "output": "derived_values.json"
+    },
+    {
+      "id": "plasma-scales-v1",
+      "directory": "plasma-scales-v1",
+      "title": "Classical deuterium plasma characteristic scales",
+      "case_version": "1.0.0",
+      "data_kinds": [
+        "analytically-derived",
+        "physical-constants"
+      ],
+      "reference_value_count": 30,
+      "check_count": 33,
+      "source_count": 2,
+      "primary_sources": [
+        "https://www.nrl.navy.mil/Portals/38/PDF%20Files/NRL_Plasma_Formulary_2023.pdf",
+        "https://physics.nist.gov/cuu/pdf/JPCRD2022CODATA.pdf"
+      ],
+      "admission_record": "source_manifest.json",
+      "scope": "Ten characteristic plasma quantities at three chosen homogeneous deuterium states.",
+      "limitations": "Ideal classical equations and explicit species/temperature/frequency conventions. No experimental device data, kinetic corrections or confinement validation.",
+      "producer_script": "derive_values.py",
+      "output": "derived_values.json"
+    },
+    {
+      "id": "classical-physics-v1",
+      "directory": "classical-physics-v1",
+      "title": "Classical analytical benchmarks: oscillator, heat diffusion and circular orbit",
+      "case_version": "1.0.0",
+      "data_kinds": [
+        "analytically-derived"
+      ],
+      "reference_value_count": 36,
+      "check_count": 18,
+      "source_count": 4,
+      "primary_sources": [
+        "https://openstax.org/books/university-physics-volume-1/pages/15-1-simple-harmonic-motion",
+        "https://openstax.org/books/university-physics-volume-1/pages/15-2-energy-in-simple-harmonic-motion",
+        "https://ocw.mit.edu/courses/18-303-linear-partial-differential-equations-fall-2006/d11b374a85c3fde55ec971fe587f8a50_heateqni.pdf",
+        "https://pwg.gsfc.nasa.gov/stargaze/Skepl3rd.htm"
+      ],
+      "admission_record": "source_manifest.json",
+      "scope": "Harmonic oscillator, one-dimensional heat diffusion and circular Kepler orbits.",
+      "limitations": "Ideal analytical verification at chosen sample points; no measured data, production solver, convergence study or long-time stability qualification.",
+      "producer_script": "derive_reference_values.py",
+      "output": "derived_values.json"
+    }
+  ]
+}

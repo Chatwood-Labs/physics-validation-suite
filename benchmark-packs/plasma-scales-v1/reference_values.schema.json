@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "points"
+  ],
+  "properties": {
+    "schema": {
+      "const": "pvs-plasma-scales-values/1"
+    },
+    "points": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "low_density",
+        "intermediate",
+        "high_density"
+      ],
+      "properties": {
+        "low_density": {
+          "$ref": "#/$defs/point"
+        },
+        "intermediate": {
+          "$ref": "#/$defs/point"
+        },
+        "high_density": {
+          "$ref": "#/$defs/point"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "electron_debye_length_m",
+        "electron_plasma_angular_frequency_rad_s",
+        "deuteron_plasma_angular_frequency_rad_s",
+        "deuteron_cyclotron_angular_frequency_rad_s",
+        "deuteron_thermal_speed_m_s",
+        "deuteron_thermal_gyroradius_m",
+        "alfven_speed_m_s",
+        "total_plasma_beta",
+        "electron_inertial_length_m",
+        "exb_drift_y_m_s"
+      ],
+      "properties": {
+        "electron_debye_length_m": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "electron_plasma_angular_frequency_rad_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "deuteron_plasma_angular_frequency_rad_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "deuteron_cyclotron_angular_frequency_rad_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "deuteron_thermal_speed_m_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "deuteron_thermal_gyroradius_m": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "alfven_speed_m_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "total_plasma_beta": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "electron_inertial_length_m": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "exb_drift_y_m_s": {
+          "type": "number",
+          "exclusiveMaximum": 0
+        }
+      }
+    }
+  }
+}

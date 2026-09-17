@@ -1,0 +1,247 @@
+{
+  "schema": "pvs-evidence/2",
+  "record": {
+    "run": {
+      "run_id": "urn:uuid:7502c7f2-ee07-4a59-af20-3bc2152351ea",
+      "mode": "validate",
+      "started_at": "2026-09-07T15:07:15.434123Z",
+      "finished_at": "2026-09-07T15:07:15.434129Z",
+      "duration_seconds": 1.7456004570703954e-05
+    },
+    "pvs": {
+      "name": "Physics Validation Suite",
+      "version": "0.2.8",
+      "implementation": "chatwood-labs/physics-validation-suite",
+      "case_schema": "pvs-case/2",
+      "evidence_schema": "pvs-evidence/2",
+      "integrity_profile": "pvs-rfc8785-sha256-v1",
+      "content_identity": {
+        "profile": "pvs-installed-package-tree-sha256-v1",
+        "canonicalization": "RFC8785",
+        "algorithm": "sha256",
+        "digest": "e5462c2a32f4a8c165c009bd98554fa7d0876124cf7566e7c1e2d5ba6223970b",
+        "files_count": 54
+      },
+      "build": {
+        "source_identity": {
+          "profile": "pvs-source-archive-sha256-v1",
+          "algorithm": "sha256",
+          "digest": "85798eeb368c38b34fbf49193375b84413cc9c598651e96e65128d344f388268"
+        },
+        "source_repository": null,
+        "source_revision": null,
+        "source_dirty": null,
+        "source_date_epoch": 1788787496
+      }
+    },
+    "case": {
+      "id": "legacy-overflow",
+      "version": "1.0.0",
+      "title": "Legacy diagnostic overflow contract",
+      "description": null,
+      "classifications": [
+        "verification"
+      ],
+      "filename": "pvs.yaml",
+      "raw_sha256": "e69334532efa5cb8ad1bc835e6bf5b9741fe1c05f1835d1ec35ddd41b20c80b4",
+      "raw_size_bytes": 524,
+      "semantic_sha256": "c3edd94236fa996c110ebe4f3b13629b9d2852591cde95749e1e407551f1ed82",
+      "resolved_definition": {
+        "schema": "pvs-case/2",
+        "id": "legacy-overflow",
+        "version": "1.0.0",
+        "title": "Legacy diagnostic overflow contract",
+        "classifications": [
+          "verification"
+        ],
+        "subject": {
+          "name": "synthetic",
+          "version": "1.0"
+        },
+        "artifacts": {
+          "result": {
+            "path": "result.json",
+            "format": "json",
+            "role": "output"
+          }
+        },
+        "checks": [
+          {
+            "id": "overflow",
+            "type": "compare",
+            "unit": "1",
+            "metric": "l1",
+            "tolerance": 0.0,
+            "actual": {
+              "value": [
+                1e+308,
+                1e+308
+              ],
+              "unit": "1"
+            },
+            "expected": {
+              "value": [
+                1e+308,
+                1e+308
+              ],
+              "unit": "1"
+            }
+          }
+        ],
+        "package": {
+          "embed_artifacts": false,
+          "html": false,
+          "pdf": false
+        }
+      }
+    },
+    "subject": {
+      "name": "synthetic",
+      "version": "1.0"
+    },
+    "execution": {
+      "mode": "validate",
+      "command": null,
+      "working_directory": ".",
+      "started_at": "2026-09-07T15:07:15.434123Z",
+      "finished_at": "2026-09-07T15:07:15.434129Z",
+      "duration_seconds": 1.7456004570703954e-05,
+      "return_code": null,
+      "expected_exit_codes": [],
+      "succeeded": true,
+      "error": null,
+      "declared_environment": {},
+      "resolved_executable": null
+    },
+    "artifacts": [
+      {
+        "id": "result",
+        "role": "output",
+        "format": "json",
+        "required": true,
+        "path": "result.json",
+        "media_type": null,
+        "description": null,
+        "expected_sha256": null,
+        "expected_sha256_matches": null,
+        "pre_execution": {
+          "exists": true,
+          "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+          "size_bytes": 3
+        },
+        "validation_input": {
+          "exists": true,
+          "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+          "size_bytes": 3
+        },
+        "post_validation": {
+          "exists": true,
+          "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+          "size_bytes": 3
+        },
+        "package_path": null
+      }
+    ],
+    "references": [],
+    "checks": [
+      {
+        "id": "overflow",
+        "type": "compare",
+        "status": "ERROR",
+        "required": true,
+        "summary": "numeric L1 norm overflowed the finite range",
+        "observed": {},
+        "criterion": {}
+      }
+    ],
+    "summary": {
+      "status": "ERROR",
+      "checks_total": 1,
+      "counts": {
+        "ERROR": 1,
+        "FAIL": 0,
+        "PASS": 0,
+        "SKIP": 0,
+        "WARN": 0
+      },
+      "provenance_status": "COMPLETE",
+      "provenance_issues": []
+    },
+    "package": {
+      "manifest_schema": "pvs-manifest/2",
+      "policy": {
+        "embed_artifacts": {
+          "effective": false,
+          "source": "case"
+        },
+        "html": {
+          "effective": false,
+          "source": "case"
+        },
+        "pdf": {
+          "effective": false,
+          "source": "case"
+        }
+      },
+      "report_profiles": {
+        "html": "pvs-html/2",
+        "pdf": "pvs-pdf/2"
+      }
+    },
+    "environment": {
+      "python": {
+        "implementation": "CPython",
+        "version": "3.12.3"
+      },
+      "platform": {
+        "system": "Linux",
+        "release": "6.18.35",
+        "machine": "x86_64"
+      },
+      "dependencies": [
+        {
+          "name": "jsonschema",
+          "version": "4.26.0"
+        },
+        {
+          "name": "netCDF4",
+          "version": "1.7.4"
+        },
+        {
+          "name": "numpy",
+          "version": "2.2.6"
+        },
+        {
+          "name": "pypdf",
+          "version": "6.16.2"
+        },
+        {
+          "name": "PyYAML",
+          "version": "6.0.3"
+        },
+        {
+          "name": "reportlab",
+          "version": "4.5.1"
+        },
+        {
+          "name": "rfc8785",
+          "version": "0.1.4"
+        }
+      ],
+      "byteorder": "little"
+    }
+  },
+  "integrity": {
+    "canonicalization": "RFC8785",
+    "algorithm": "sha256",
+    "digest": "a8d268ebc6c9117ae4013a0ae1ef11bd01df0d3cb8913fe20ed8d4dc57fb63e2",
+    "evidence_id": "pvs:sha256:a8d268ebc6c9117ae4013a0ae1ef11bd01df0d3cb8913fe20ed8d4dc57fb63e2",
+    "finding": {
+      "projection": "pvs-finding-projection/1",
+      "canonicalization": "RFC8785",
+      "algorithm": "sha256",
+      "status": "NOT_ISSUED",
+      "reason": "ERROR_PRESENT"
+    }
+  }
+}

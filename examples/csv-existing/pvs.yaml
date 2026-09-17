@@ -1,0 +1,43 @@
+schema: pvs-case/2
+id: example-csv-existing
+version: 1.0.0
+title: Existing CSV time-series verification
+classifications: [verification]
+
+subject:
+  name: synthetic-csv-producer
+  version: 1.0.0
+
+artifacts:
+  profile:
+    path: profile.csv
+    role: output
+    format: csv
+
+checks:
+  - id: value-finite
+    type: finite
+    source: {artifact: profile, column: value, unit: "1"}
+    unit: "1"
+  - id: value-range
+    type: range
+    source: {artifact: profile, column: value, unit: "1"}
+    unit: "1"
+    minimum: 0.0
+    maximum: 1.0
+  - id: value-nonincreasing
+    type: monotonic
+    source: {artifact: profile, column: value, unit: "1"}
+    unit: "1"
+    direction: nonincreasing
+    absolute_tolerance: 0.0
+  - id: final-value
+    type: compare
+    actual: {artifact: profile, column: value, reduce: last, unit: "1"}
+    expected: {value: 0.0, unit: "1"}
+    unit: "1"
+    metric: absolute
+    tolerance: 0.0
+
+package:
+  embed_artifacts: true

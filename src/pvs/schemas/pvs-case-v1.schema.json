@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chatwoodlabs.com/schemas/pvs-case-v1.schema.json",
+  "title": "Physics Validation Suite case v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "version", "title", "classifications", "subject", "artifacts", "checks"],
+  "properties": {
+    "schema": {"const": "pvs-case/1"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,127}$"},
+    "version": {"type": "string", "minLength": 1, "maxLength": 64},
+    "title": {"type": "string", "minLength": 1, "maxLength": 240},
+    "description": {"type": "string", "maxLength": 4000},
+    "classifications": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["verification", "validation", "regression", "cross-code-comparison"]
+      }
+    },
+    "subject": {"$ref": "#/$defs/subject"},
+    "execution": {"$ref": "#/$defs/execution"},
+    "artifacts": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$"},
+      "additionalProperties": {"$ref": "#/$defs/artifact"}
+    },
+    "references": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/reference"}
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/check"}
+    },
+    "package": {"$ref": "#/$defs/package"},
+    "metadata": {"type": "object"}
+  },
+  "$defs": {
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 200},
+        "version": {"type": "string", "minLength": 1, "maxLength": 200},
+        "revision": {"type": "string", "maxLength": 200},
+        "source_repository": {"type": "string", "format": "uri"},
+        "description": {"type": "string", "maxLength": 2000}
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command"],
+      "properties": {
+        "command": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 512,
+          "items": {"type": "string", "maxLength": 8192}
+        },
+        "working_directory": {"type": "string", "minLength": 1, "default": "."},
+        "timeout_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 604800},
+        "environment": {
+          "type": "object",
+          "propertyNames": {"pattern": "^[A-Za-z_][A-Za-z0-9_]*$"},
+          "additionalProperties": {"type": "string"}
+        },
+        "expected_exit_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 0, "maximum": 255},
+          "default": [0]
+        },
+        "random_seed": {"type": ["integer", "string", "null"]}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "role", "format"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "role": {"enum": ["subject", "input", "reference", "output", "auxiliary"]},
+        "format": {"enum": ["json", "csv", "netcdf", "text", "binary"]},
+        "required": {"type": "boolean", "default": true},
+        "expected_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "media_type": {"type": "string", "maxLength": 200},
+        "description": {"type": "string", "maxLength": 2000}
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "citation", "locator"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$"},
+        "type": {"enum": ["analytic", "published", "experimental", "canonical-fixture", "cross-code"]},
+        "citation": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "locator": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "artifact": {"type": "string"},
+        "source_location": {"type": "string", "maxLength": 1000},
+        "accessed_utc": {"type": "string", "format": "date"},
+        "derivation": {"type": "string", "maxLength": 4000},
+        "notes": {"type": "string", "maxLength": 4000}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact"],
+      "properties": {
+        "artifact": {"type": "string"},
+        "pointer": {"type": "string"},
+        "column": {"type": "string"},
+        "variable": {"type": "string"},
+        "reduce": {"enum": ["sum", "mean", "min", "max", "first", "last", "size"]}
+      },
+      "allOf": [
+        {
+          "not": {
+            "anyOf": [
+              {"required": ["pointer", "column"]},
+              {"required": ["pointer", "variable"]},
+              {"required": ["column", "variable"]}
+            ]
+          }
+        }
+      ]
+    },
+    "operand": {
+      "oneOf": [
+        {"$ref": "#/$defs/source"},
+        {"type": "number"},
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "number"}
+        }
+      ]
+    },
+    "term": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "coefficient"],
+      "properties": {
+        "value": {"$ref": "#/$defs/operand"},
+        "coefficient": {"type": "number"},
+        "label": {"type": "string", "maxLength": 200}
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$"},
+        "type": {"enum": ["exists", "schema", "finite", "range", "monotonic", "compare", "reference", "conservation"]},
+        "description": {"type": "string", "maxLength": 2000},
+        "required": {"type": "boolean", "default": true},
+        "artifact": {"type": "string"},
+        "schema_artifact": {"type": "string"},
+        "source": {"$ref": "#/$defs/source"},
+        "actual": {"$ref": "#/$defs/operand"},
+        "expected": {"$ref": "#/$defs/operand"},
+        "reference_id": {"type": "string"},
+        "metric": {"enum": ["absolute", "relative", "l1", "l2", "linf", "close"]},
+        "tolerance": {"type": "number", "minimum": 0},
+        "absolute_tolerance": {"type": "number", "minimum": 0},
+        "relative_tolerance": {"type": "number", "minimum": 0},
+        "scale_floor": {"type": "number", "exclusiveMinimum": 0},
+        "minimum": {"type": "number"},
+        "maximum": {"type": "number"},
+        "inclusive_minimum": {"type": "boolean", "default": true},
+        "inclusive_maximum": {"type": "boolean", "default": true},
+        "direction": {"enum": ["increasing", "decreasing", "nondecreasing", "nonincreasing"]},
+        "terms": {
+          "type": "array",
+          "minItems": 2,
+          "items": {"$ref": "#/$defs/term"}
+        },
+        "normalization": {"$ref": "#/$defs/operand"}
+      },
+      "allOf": [
+        {"if": {"properties": {"type": {"const": "exists"}}}, "then": {"required": ["artifact"]}},
+        {"if": {"properties": {"type": {"const": "schema"}}}, "then": {"required": ["artifact", "schema_artifact"]}},
+        {"if": {"properties": {"type": {"enum": ["finite", "range", "monotonic"]}}}, "then": {"required": ["source"]}},
+        {"if": {"properties": {"type": {"const": "range"}}}, "then": {"anyOf": [{"required": ["minimum"]}, {"required": ["maximum"]}]}},
+        {"if": {"properties": {"type": {"const": "monotonic"}}}, "then": {"required": ["direction", "absolute_tolerance"]}},
+        {"if": {"properties": {"type": {"enum": ["compare", "reference"]}}}, "then": {"required": ["actual", "expected", "metric"]}},
+        {"if": {"properties": {"type": {"const": "reference"}}}, "then": {"required": ["reference_id"]}},
+        {"if": {"required": ["metric"], "properties": {"metric": {"enum": ["absolute", "relative", "l1", "l2", "linf"]}}}, "then": {"required": ["tolerance"]}},
+        {"if": {"required": ["metric"], "properties": {"metric": {"const": "relative"}}}, "then": {"required": ["scale_floor"]}},
+        {"if": {"required": ["metric"], "properties": {"metric": {"const": "close"}}}, "then": {"required": ["absolute_tolerance", "relative_tolerance"]}},
+        {"if": {"properties": {"type": {"const": "conservation"}}}, "then": {"required": ["terms", "expected", "absolute_tolerance", "relative_tolerance"]}}
+      ]
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "embed_artifacts": {"type": "boolean", "default": false},
+        "html": {"type": "boolean", "default": true},
+        "pdf": {"type": "boolean", "default": true}
+      }
+    }
+  }
+}

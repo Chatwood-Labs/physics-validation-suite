@@ -1,0 +1,27 @@
+{
+  "frozen_suite": {
+    "exclusions": [],
+    "failed": 0,
+    "passed": 1046,
+    "skipped": 0
+  },
+  "host": "Linux x86_64/glibc",
+  "limitations": [
+    "Native Windows and macOS runtime qualification has not been performed for this release.",
+    "Host rebuild reproducibility is not a cross-host reproducibility claim."
+  ],
+  "lock_check": "passed",
+  "mypy": {
+    "mypy-linux.log": "Success: no issues found in 51 source files",
+    "mypy-macos.log": "Success: no issues found in 51 source files",
+    "mypy-python310.log": "Success: no issues found in 51 source files",
+    "mypy-windows.log": "Success: no issues found in 51 source files"
+  },
+  "numpy": "2.2.6",
+  "pytest": "8.3.5",
+  "python": "3.12.3",
+  "review_tests_sha256": "fcc8dc1cbc55cb98ddbaaf0d162b02ccd0937784fe715a8dbcd582f53972a545",
+  "ruff": "passed",
+  "shell_syntax": "passed",
+  "version": "0.2.9"
+}

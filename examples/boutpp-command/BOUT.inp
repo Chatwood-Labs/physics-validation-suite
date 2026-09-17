@@ -1,0 +1,10 @@
+[mesh]
+nx = 16
+ny = 16
+
+[solver]
+type = cvode
+
+# Placeholder only. Replace with the options required by the selected public
+# BOUT++ diffusion/manufactured-solution example.
+

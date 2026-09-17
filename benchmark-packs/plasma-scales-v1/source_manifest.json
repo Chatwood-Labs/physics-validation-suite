@@ -1,0 +1,189 @@
+{
+  "schema": "pvs-physics-source-manifest/1",
+  "audited_utc": "2026-09-14",
+  "data_kind": "independently-derived-reference-values",
+  "claim_boundary": "Pack-designed homogeneous deuterium states and evaluated public equations. No experimental measurements, named-device data, simulation outputs or external production solver validation.",
+  "sources": {
+    "nrl-2023": {
+      "citation": "A. Beresnyak, 2023 NRL Plasma Formulary, Naval Research Laboratory (2023).",
+      "primary_locator": "https://www.nrl.navy.mil/Portals/38/PDF%20Files/NRL_Plasma_Formulary_2023.pdf",
+      "sha256": "1a13dc8f0a1e493806adde235b22ccdd80eed939936a4622b36d0b563bea2596",
+      "size_bytes": 1270350,
+      "hash_scope": "Exact official NRL PDF bytes, identified but not redistributed.",
+      "locations": [
+        "Printed p.18 (PDF page19): Gaussian-to-SI conversion",
+        "Printed p.19 (PDF page20): SI Lorentz force",
+        "Printed p.28 (PDF page29): frequencies and lengths",
+        "Printed p.29 (PDF page30): thermal/Alfven velocities, beta, magnetic pressure"
+      ],
+      "status": "source-byte-identified-equations-reviewed"
+    },
+    "codata-2022": {
+      "citation": "P. J. Mohr, D. B. Newell, B. N. Taylor and E. Tiesinga, CODATA recommended values of the fundamental physical constants: 2022, JPCRD 54, 033105 (2025).",
+      "doi": "10.1063/5.0279860",
+      "primary_locator": "https://physics.nist.gov/cuu/pdf/JPCRD2022CODATA.pdf",
+      "online_table_locator": "https://physics.nist.gov/cuu/Constants/Table/allascii.txt",
+      "sha256": "4d7e7f34b98ab2fc4df68b38247f818f6fc8bdf7f25f91abcdfbc329e22d2f32",
+      "size_bytes": 5920363,
+      "hash_scope": "Exact official NIST JPCRD PDF bytes; online table is a supplementary locator and is not the hashed artifact. Neither full source is redistributed.",
+      "locations": [
+        "Table XXXII, printed 033105-44: c, e, me, epsilon0, mu0",
+        "Table XXXIII, printed 033105-48: deuteron mass"
+      ],
+      "status": "source-byte-identified-constants-reviewed"
+    }
+  },
+  "rights": {
+    "redistributed_content": "Original example code, pack-designed input states, independently evaluated numerical results and a small attributed selection of fundamental-constant facts. No source PDF, database dump, source image, proprietary result or source prose is included.",
+    "rationale": "Published equations and selected physical-constant facts are used to create new reference calculations. This is not a claim that all NRL/NIST publications or databases have an unrestricted redistribution licence.",
+    "third_party_source_license_granted": false
+  },
+  "constants": {
+    "elementary_charge": {
+      "value": "1.602176634e-19",
+      "unit": "C",
+      "standard_uncertainty": "0",
+      "status": "exact SI defining constant"
+    },
+    "speed_of_light": {
+      "value": "299792458",
+      "unit": "m s^-1",
+      "standard_uncertainty": "0",
+      "status": "exact SI defining constant"
+    },
+    "electron_mass": {
+      "value": "9.1093837139e-31",
+      "unit": "kg",
+      "standard_uncertainty": "2.8e-40",
+      "status": "CODATA 2022 central value"
+    },
+    "deuteron_mass": {
+      "value": "3.3435837768e-27",
+      "unit": "kg",
+      "standard_uncertainty": "1.0e-36",
+      "status": "CODATA 2022 central value; bare nucleus, not neutral atom"
+    },
+    "vacuum_permittivity": {
+      "value": "8.8541878188e-12",
+      "unit": "F m^-1",
+      "standard_uncertainty": "1.4e-21",
+      "status": "CODATA 2022 central value"
+    },
+    "vacuum_permeability": {
+      "value": "1.25663706127e-6",
+      "unit": "N A^-2",
+      "standard_uncertainty": "2.0e-16",
+      "status": "CODATA 2022 central value; not assumed exactly 4*pi*1e-7"
+    }
+  },
+  "constant_policy": "Published rounded central values are frozen independently; epsilon0*mu0*c^2 is therefore unity only to the precision of those published numbers. Source standard uncertainties are not numerical regression tolerances and no uncertainty propagation is claimed.",
+  "input_units": {
+    "electron_density_m-3": "m^-3",
+    "deuteron_density_m-3": "m^-3",
+    "electron_temperature_eV": "eV",
+    "deuteron_temperature_eV": "eV",
+    "B_z_T": "T",
+    "E_x_V_m": "V m^-1"
+  },
+  "input_origin": "Three explicitly chosen analytic verification states; not measured data or parameter estimates from any device.",
+  "input_states": {
+    "low_density": {
+      "electron_density_m-3": 1e+18,
+      "deuteron_density_m-3": 1e+18,
+      "electron_temperature_eV": 10,
+      "deuteron_temperature_eV": 5,
+      "B_z_T": 0.1,
+      "E_x_V_m": 100
+    },
+    "intermediate": {
+      "electron_density_m-3": 1e+19,
+      "deuteron_density_m-3": 1e+19,
+      "electron_temperature_eV": 100,
+      "deuteron_temperature_eV": 100,
+      "B_z_T": 1,
+      "E_x_V_m": 2000
+    },
+    "high_density": {
+      "electron_density_m-3": 1e+20,
+      "deuteron_density_m-3": 1e+20,
+      "electron_temperature_eV": 1000,
+      "deuteron_temperature_eV": 500,
+      "B_z_T": 5,
+      "E_x_V_m": 15000
+    }
+  },
+  "si_conversion": "Use charge in coulombs, density in m^-3, mass in kg, B in tesla, E in V/m and thermal energy kB*T = e*T_eV joules. Gaussian electrostatic factors 4*pi become 1/epsilon0; magnetic inertia uses mu0. No rounded Gaussian practical coefficient is treated as a high precision SI coefficient.",
+  "quantities": {
+    "electron_debye_length_m": {
+      "unit": "m",
+      "equation_si": "sqrt(epsilon0 * e * Te / (ne * e^2))",
+      "source_location": "nrl-2023: p.28, Debye length; electron contribution only"
+    },
+    "electron_plasma_angular_frequency_rad_s": {
+      "unit": "rad s^-1",
+      "equation_si": "sqrt(ne * e^2 / (epsilon0 * me))",
+      "source_location": "nrl-2023: p.28, electron plasma frequency"
+    },
+    "deuteron_plasma_angular_frequency_rad_s": {
+      "unit": "rad s^-1",
+      "equation_si": "sqrt(nD * e^2 / (epsilon0 * md))",
+      "source_location": "nrl-2023: p.28, ion plasma frequency, Z=1"
+    },
+    "deuteron_cyclotron_angular_frequency_rad_s": {
+      "unit": "rad s^-1",
+      "equation_si": "e * Bz / md",
+      "source_location": "nrl-2023: p.28, ion gyrofrequency; positive magnitude"
+    },
+    "deuteron_thermal_speed_m_s": {
+      "unit": "m s^-1",
+      "equation_si": "sqrt(e * Ti / md)",
+      "source_location": "nrl-2023: p.29, ion thermal velocity; one-dimensional standard deviation convention"
+    },
+    "deuteron_thermal_gyroradius_m": {
+      "unit": "m",
+      "equation_si": "sqrt(e * Ti / md) / (e * Bz / md)",
+      "source_location": "nrl-2023: p.28, ion gyroradius; thermal scale using specified speed convention"
+    },
+    "alfven_speed_m_s": {
+      "unit": "m s^-1",
+      "equation_si": "Bz / sqrt(mu0 * nD * md)",
+      "source_location": "nrl-2023: p.29, Alfven velocity; ion mass density only"
+    },
+    "total_plasma_beta": {
+      "unit": "1",
+      "equation_si": "2 * mu0 * e * (ne * Te + nD * Ti) / Bz^2",
+      "source_location": "nrl-2023: p.29 beta and magnetic pressure, summed electron and ion pressure"
+    },
+    "electron_inertial_length_m": {
+      "unit": "m",
+      "equation_si": "c / sqrt(ne * e^2 / (epsilon0 * me))",
+      "source_location": "nrl-2023: p.28, electron inertial length"
+    },
+    "exb_drift_y_m_s": {
+      "unit": "m s^-1",
+      "equation_si": "-Ex / Bz",
+      "source_location": "nrl-2023: p.19 SI Lorentz force; solve E + v cross B = 0 for E=(Ex,0,0), B=(0,0,Bz)"
+    }
+  },
+  "independence": {
+    "subject": "derive_values.py uses binary64 and never reads frozen values or independent_reference.py.",
+    "frozen_reference": "reference_values.json was computed separately using 60-digit Decimal arithmetic in independent_reference.py, then rounded to JSON binary64-representable decimal numbers. The verifier independently transcribes constants/states and uses rearranged algebra; it has no write option.",
+    "limitation": "Two implementations and source review reduce transcription/arithmetic risk but are not an experimental comparison or proof of model applicability."
+  },
+  "tolerance_policy": {
+    "relative_tolerance": 2e-14,
+    "absolute_tolerance": 0,
+    "purpose": "Cross-platform binary64 reproduction of explicitly rounded constants and public equations. Does not represent physical/model uncertainty, measurement precision or confidence interval."
+  },
+  "applicability": [
+    "Homogeneous fully ionized singly charged deuterium, ne=nD; isotropic Maxwellian temperature interpretation.",
+    "Electron Debye length is the electron-only screening contribution, not combined electron-ion screening.",
+    "Angular frequencies are radians per second, not cycles per second. Cyclotron quantity is positive magnitude.",
+    "Thermal speed is sqrt(kB*Ti/md), a one-dimensional Maxwellian standard deviation. Gyroradius is the matching characteristic scale; not perpendicular-RMS gyroradius.",
+    "Alfven speed is ideal nonrelativistic MHD with ion mass density; electron inertia, displacement-current, finite-Larmor-radius, kinetic and anisotropy corrections omitted. Wave use additionally requires long wavelengths and frequencies small compared with ion gyrofrequency.",
+    "Total beta uses scalar electron plus ion thermal pressure and magnetic pressure B^2/(2*mu0); no stability threshold is asserted.",
+    "E-cross-B drift assumes uniform steady crossed fields and collisionless magnetized guiding-center motion; selected drift speeds are nonrelativistic.",
+    "Plasma frequencies and electron inertial length are classical characteristic scales, not a complete magnetized dispersion relation.",
+    "No universal model-error bound is supplied. Compare to simulation only after matching conventions and the required ordering."
+  ]
+}

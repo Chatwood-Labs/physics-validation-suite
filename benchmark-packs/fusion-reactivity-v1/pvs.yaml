@@ -1,0 +1,291 @@
+schema: pvs-case/2
+id: fusion-reactivity-reference-v1
+version: 1.0.0
+title: 'Published fusion data: SI conversion and event-rate normalisation'
+description: Thirty NRL2023 tabulated Maxwellian reactivities for DT, DD-total and D-He3. The sample
+  adapter reads the published data and verifies conversion and pair counting; it does not predict physical
+  reactivity.
+classifications:
+- verification
+- regression
+subject:
+  name: public-fusion-table-adapter
+  version: 1.0.0
+  description: Original standard-library adapter of published input data; no independent reactivity
+    model.
+execution:
+  command:
+  - python
+  - convert_reference_table.py
+  - --output
+  - derived_values.json
+  working_directory: .
+  timeout_seconds: 30
+  expected_exit_codes:
+  - 0
+artifacts:
+  adapter-source:
+    path: convert_reference_table.py
+    role: subject
+    format: text
+    expected_sha256: 6ba81884ec900b8b535c0648b787ff01a5d4aa987bc523c97e357bda56800e60
+  published-table:
+    path: published_table.json
+    role: input
+    format: json
+    expected_sha256: 0dc789a3bdfbdadf4e56dd715b709c596af03853045849083f1364d74e9e8982
+  mixture-inputs:
+    path: inputs.json
+    role: input
+    format: json
+    expected_sha256: e36736da355d6cdce329ffd02ea16702fd3c5b9dc18cf86359d4d2ac2b5f4314
+  frozen-values:
+    path: reference_values.json
+    role: reference
+    format: json
+    expected_sha256: a5630f29ca4b006e4dd21c76f4a04c8667a7c646bd02d9e2853f79f56740c2ec
+  values-schema:
+    path: reference_values.schema.json
+    role: reference
+    format: json
+    expected_sha256: 5f5f2d75a46e5eb86e26f50fb750f99d47237dd8515a8d8ca59005f5a9e118dd
+  source-manifest:
+    path: source_manifest.json
+    role: reference
+    format: json
+    expected_sha256: 044e92bdc0eabe90ed14481ca256032ddf9298c0b7d480d301049ecd26b276c7
+  derived-values:
+    path: derived_values.json
+    role: output
+    format: json
+references:
+- id: nrl-2023
+  type: published
+  citation: A. Beresnyak, 2023 NRL Plasma Formulary (2023).
+  locator: https://www.nrl.navy.mil/Portals/38/PDF%20Files/NRL_Plasma_Formulary_2023.pdf
+  source_location: 'p.45: Maxwellian reaction-rate table, DT, DD-total and D-He3 columns'
+  artifact: frozen-values
+  accessed_utc: '2026-09-14'
+  notes: Exact source bytes and displayed precision are recorded. These are approximate published reference
+    values, not experimental observations with uncertainty bars.
+- id: xie-2023-pair-counting
+  type: published
+  citation: H. Xie et al., arXiv:2212.01840v2 (2023).
+  locator: https://arxiv.org/pdf/2212.01840v2
+  source_location: p.2 Eq. (1)
+  artifact: frozen-values
+  accessed_utc: '2026-09-14'
+  notes: Only elementary event counting is used; no reactivity model from the paper is imported.
+checks:
+- id: output-exists
+  type: exists
+  artifact: derived-values
+- id: output-schema
+  type: schema
+  artifact: derived-values
+  schema_artifact: values-schema
+- id: source-manifest-present
+  type: exists
+  artifact: source-manifest
+- id: dt-reactivity-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /reactivity_m3_s/dt
+    unit: m^3 s^-1
+  unit: m^3 s^-1
+- id: dt-reactivity-positive
+  type: range
+  source:
+    artifact: derived-values
+    pointer: /reactivity_m3_s/dt
+    unit: m^3 s^-1
+  unit: m^3 s^-1
+  minimum: 0.0
+  inclusive_minimum: false
+- id: dt-reactivity-reference
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /reactivity_m3_s/dt
+    unit: m^3 s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /reactivity_m3_s/dt
+    unit: m^3 s^-1
+  unit: m^3 s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: dd-total-reactivity-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /reactivity_m3_s/dd_total
+    unit: m^3 s^-1
+  unit: m^3 s^-1
+- id: dd-total-reactivity-positive
+  type: range
+  source:
+    artifact: derived-values
+    pointer: /reactivity_m3_s/dd_total
+    unit: m^3 s^-1
+  unit: m^3 s^-1
+  minimum: 0.0
+  inclusive_minimum: false
+- id: dd-total-reactivity-reference
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /reactivity_m3_s/dd_total
+    unit: m^3 s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /reactivity_m3_s/dd_total
+    unit: m^3 s^-1
+  unit: m^3 s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: d-he3-reactivity-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /reactivity_m3_s/d_he3
+    unit: m^3 s^-1
+  unit: m^3 s^-1
+- id: d-he3-reactivity-positive
+  type: range
+  source:
+    artifact: derived-values
+    pointer: /reactivity_m3_s/d_he3
+    unit: m^3 s^-1
+  unit: m^3 s^-1
+  minimum: 0.0
+  inclusive_minimum: false
+- id: d-he3-reactivity-reference
+  type: reference
+  reference_id: nrl-2023
+  actual:
+    artifact: derived-values
+    pointer: /reactivity_m3_s/d_he3
+    unit: m^3 s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /reactivity_m3_s/d_he3
+    unit: m^3 s^-1
+  unit: m^3 s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: dt-event-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /event_rate_per_m3_s/dt
+    unit: m^-3 s^-1
+  unit: m^-3 s^-1
+- id: dt-event-positive
+  type: range
+  source:
+    artifact: derived-values
+    pointer: /event_rate_per_m3_s/dt
+    unit: m^-3 s^-1
+  unit: m^-3 s^-1
+  minimum: 0.0
+  inclusive_minimum: false
+- id: dt-event-reference
+  type: reference
+  reference_id: xie-2023-pair-counting
+  actual:
+    artifact: derived-values
+    pointer: /event_rate_per_m3_s/dt
+    unit: m^-3 s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /event_rate_per_m3_s/dt
+    unit: m^-3 s^-1
+  unit: m^-3 s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: dd-total-event-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /event_rate_per_m3_s/dd_total
+    unit: m^-3 s^-1
+  unit: m^-3 s^-1
+- id: dd-total-event-positive
+  type: range
+  source:
+    artifact: derived-values
+    pointer: /event_rate_per_m3_s/dd_total
+    unit: m^-3 s^-1
+  unit: m^-3 s^-1
+  minimum: 0.0
+  inclusive_minimum: false
+- id: dd-total-event-reference
+  type: reference
+  reference_id: xie-2023-pair-counting
+  actual:
+    artifact: derived-values
+    pointer: /event_rate_per_m3_s/dd_total
+    unit: m^-3 s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /event_rate_per_m3_s/dd_total
+    unit: m^-3 s^-1
+  unit: m^-3 s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+- id: d-he3-event-finite
+  type: finite
+  source:
+    artifact: derived-values
+    pointer: /event_rate_per_m3_s/d_he3
+    unit: m^-3 s^-1
+  unit: m^-3 s^-1
+- id: d-he3-event-positive
+  type: range
+  source:
+    artifact: derived-values
+    pointer: /event_rate_per_m3_s/d_he3
+    unit: m^-3 s^-1
+  unit: m^-3 s^-1
+  minimum: 0.0
+  inclusive_minimum: false
+- id: d-he3-event-reference
+  type: reference
+  reference_id: xie-2023-pair-counting
+  actual:
+    artifact: derived-values
+    pointer: /event_rate_per_m3_s/d_he3
+    unit: m^-3 s^-1
+  expected:
+    artifact: frozen-values
+    pointer: /event_rate_per_m3_s/d_he3
+    unit: m^-3 s^-1
+  unit: m^-3 s^-1
+  metric: close
+  absolute_tolerance: 0.0
+  relative_tolerance: 2.0e-14
+package:
+  embed_artifacts: true
+  html: true
+  pdf: true
+metadata:
+  source_byte_complete: true
+  source_qualification_complete: true
+  scope: Published table adapter and event-rate normalisation; no independent physical reactivity prediction
+    or production solver.
+  data_kind: published-tabulated-reference-and-derived-normalisation
+  published_reference_values: 30
+  derived_output_values: 60
+  tolerance_policy: 2e-14 relative tolerance checks numeric transformations of printed values, not agreement
+    of a physical model with uncertain measurements.
+  limitations: Only three reaction channels at 10 published temperatures. DD is total, not branch-resolved.
+    No interpolation, uncertainty bands or Maxwellian integration.

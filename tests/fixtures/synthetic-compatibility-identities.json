@@ -1,0 +1,24 @@
+{
+  "scope": "New synthetic fixtures; no historical-release provenance claim.",
+  "generator": {
+    "sha256": "1aca2014582d48088f20fc716deacb9d478aef331a12c1ba5dbf79614b8084d3",
+    "size_bytes": 6861
+  },
+  "pvs_version": "0.3.12",
+  "fixtures": [
+    {
+      "path": "synthetic-json-evidence-v1.zip",
+      "sha256": "b80ff15688ce4f358a959ddae6294571ce389985f478343df72e00cefd4af8cc",
+      "size_bytes": 46517,
+      "evidence_id": "pvs:sha256:b6443ea3a2b2128f70c5a3539d01466f2b6a14c8f338e190869504a671161efd",
+      "package_id": "pvs-package:sha256:f8572abd3b7c321f1b159350f20b67f987b35d410dc3fdd7dc56f267045675f6"
+    },
+    {
+      "path": "synthetic-json-evidence-v3.zip",
+      "sha256": "21ef069bc0a89749778338cf39dc3e0905cba300eecebd03c16e3039947a9fa6",
+      "size_bytes": 51088,
+      "evidence_id": "pvs:sha256:f11dd2766cf894b2f1179274d4595de5844f53932561431f38139da982b26fa2",
+      "package_id": "pvs-package:sha256:bd0c8a588a63b4dc884266013e49073b9d2d942a98ad94da26a1d65f81620b92"
+    }
+  ]
+}

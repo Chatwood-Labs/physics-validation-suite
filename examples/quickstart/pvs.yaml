@@ -1,0 +1,25 @@
+schema: pvs-case/2
+id: quickstart
+version: 1.0.0
+title: Check an existing JSON result
+classifications: [verification]
+subject:
+  name: supplied-example-data
+  version: 1.0.0
+artifacts:
+  result:
+    path: result.json
+    role: output
+    format: json
+checks:
+  - id: expected-value
+    type: compare
+    unit: "1"
+    actual: {artifact: result, pointer: /value, unit: "1"}
+    expected: {value: 42.0, unit: "1"}
+    metric: absolute
+    tolerance: 0.0
+package:
+  embed_artifacts: true
+  html: true
+  pdf: true

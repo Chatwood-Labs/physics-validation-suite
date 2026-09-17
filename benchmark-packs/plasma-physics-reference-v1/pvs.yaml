@@ -1,0 +1,328 @@
+schema: pvs-case/2
+id: plasma-physics-reference-audit-v1
+version: 3.0.0
+title: Reviewed plasma reference equations and published tables
+description: >-
+  Source-reviewed equations and published table transcriptions. This reference
+  audit checks a standalone reference derivation, not a production plasma solver.
+classifications: [verification, regression]
+
+subject:
+  name: independent-plasma-reference-derivation
+  version: 3.0.0
+  description: Standalone standard-library Python implementation of the cited equations.
+
+execution:
+  command: [python, derive_reference_values.py, --output, derived_values.json]
+  working_directory: .
+  timeout_seconds: 30
+  environment:
+    PYTHONHASHSEED: "0"
+  expected_exit_codes: [0]
+
+artifacts:
+  derivation-source:
+    path: derive_reference_values.py
+    role: subject
+    format: text
+    expected_sha256: befac22f5b18c0742c090df2ea2b6d5fa883b9a438f99aa0a788a65a4401dae7
+  derived-values:
+    path: derived_values.json
+    role: output
+    format: json
+  frozen-values:
+    path: reference_values.json
+    role: reference
+    format: json
+    expected_sha256: d028ac4233df042251b46db8bd49eb94bd05a0b52b59fc8d2d23a4125d43a228
+  values-schema:
+    path: reference_values.schema.json
+    role: reference
+    format: json
+    expected_sha256: 7a8d7c774cb09285aa529d831da8667c5053405a16fe40fc9693823942af8d07
+  published-tables:
+    path: published_table_anchors.json
+    role: reference
+    format: json
+    expected_sha256: 7752deb9f43a1e1fb8e080c3bb1d4b44c56d0c2405729316e9c7e472dcc94d8c
+  source-manifest:
+    path: source_manifest.json
+    role: reference
+    format: json
+    expected_sha256: 1349edfdd8625b5ca8d1346402f708eaef42fb9ac33b717e811c4e4096c03689
+
+references:
+  - id: nrl-2023
+    type: published
+    citation: "A. Beresnyak, 2023 NRL Plasma Formulary, Naval Research Laboratory (2023)."
+    locator: "Official NRL PDF; exact locator and SHA-256 in source_manifest.json."
+    artifact: frozen-values
+    source_location: "p. 28; pp. 33-34; p. 58 Eq. (30)"
+    accessed_utc: "2026-09-14"
+    derivation: "Practical-unit equations transcribed with explicit cm/SI conversions and complete ion compositions."
+  - id: bosch-hale-1992
+    type: published
+    citation: "H.-S. Bosch and G. M. Hale, Nuclear Fusion 32, 611-631 (1992), DOI 10.1088/0029-5515/32/4/I07; erratum DOI 10.1088/0029-5515/33/12/513."
+    locator: "Primary DOI plus reviewed journal-scan identity in source_manifest.json."
+    artifact: frozen-values
+    source_location: "Eqs. (12)-(14), p. 624; Tables VII-VIII, p. 625"
+    accessed_utc: "2026-09-14"
+    notes: "The identified 1992 article was visually reviewed. Its 1993 erratum remains unreviewed; this case does not claim qualification against all published corrections. Fit/model uncertainty is separate from regression tolerance."
+  - id: spitzer-harm-1953
+    type: published
+    citation: "L. Spitzer Jr. and R. Harm, Physical Review 89, 977-981 (1953), DOI 10.1103/PhysRev.89.977."
+    locator: "Primary DOI plus exact reviewed-copy identity in source_manifest.json."
+    artifact: published-tables
+    source_location: "Table III, p. 980"
+    accessed_utc: "2026-09-14"
+    notes: "Direct transcription with finite and range checks; no transport solver is executed."
+  - id: evans-1973
+    type: published
+    citation: "F. Evans, LA-5448-MS (1973), DOI 10.2172/4398792."
+    locator: "Official OSTI PDF; exact locator and SHA-256 in source_manifest.json."
+    artifact: published-tables
+    source_location: "Table I, printed p. 5 (PDF page 8); Eq. (27a), printed p. 4 (PDF page 7)"
+    accessed_utc: "2026-09-14"
+    notes: "Visual source inspection confirms printed 0.45 and 0.83. Historical OCR/transcription errors 0.65 and 0.63 are recorded as pack errors, not published anomalies."
+  - id: codata-2022
+    type: published
+    citation: "P. J. Mohr et al., JPCRD 54, 033105 (2025), DOI 10.1063/5.0279860; NIST Version 9.0."
+    locator: "Official NIST database and exact JPCRD PDF identity in source_manifest.json."
+    artifact: frozen-values
+    accessed_utc: "2026-09-14"
+
+checks:
+  - id: derived-output-exists
+    type: exists
+    artifact: derived-values
+  - id: derived-output-schema
+    type: schema
+    artifact: derived-values
+    schema_artifact: values-schema
+  - id: source-manifest-present
+    type: exists
+    artifact: source-manifest
+
+  - id: nrl-collision-frequency-finite
+    type: finite
+    source: {artifact: derived-values, pointer: /nrl_electron_collision/frequency_s-1, unit: s^-1}
+    unit: s^-1
+  - id: nrl-collision-frequency-positive
+    type: range
+    source: {artifact: derived-values, pointer: /nrl_electron_collision/frequency_s-1, unit: s^-1}
+    unit: s^-1
+    minimum: 0.0
+    inclusive_minimum: false
+  - id: nrl-collision-log-reference
+    type: reference
+    reference_id: nrl-2023
+    actual: {artifact: derived-values, pointer: /nrl_electron_collision/ln_lambda, unit: "1"}
+    expected: {artifact: frozen-values, pointer: /nrl_electron_collision/ln_lambda, unit: "1"}
+    unit: "1"
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 2.0e-14
+  - id: nrl-collision-frequency-reference
+    type: reference
+    reference_id: nrl-2023
+    actual: {artifact: derived-values, pointer: /nrl_electron_collision/frequency_s-1, unit: s^-1}
+    expected: {artifact: frozen-values, pointer: /nrl_electron_collision/frequency_s-1, unit: s^-1}
+    unit: s^-1
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 2.0e-14
+  - id: nrl-collision-time-reference
+    type: reference
+    reference_id: nrl-2023
+    actual: {artifact: derived-values, pointer: /nrl_electron_collision/collision_time_s, unit: s}
+    expected: {artifact: frozen-values, pointer: /nrl_electron_collision/collision_time_s, unit: s}
+    unit: s
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 2.0e-14
+
+  - id: nrl-equilibration-frequency-finite
+    type: finite
+    source: {artifact: derived-values, pointer: /nrl_dt_equilibration/frequency_s-1, unit: s^-1}
+    unit: s^-1
+  - id: nrl-equilibration-mass-reference
+    type: reference
+    reference_id: nrl-2023
+    actual: {artifact: derived-values, pointer: /nrl_dt_equilibration/effective_mass_ratio, unit: "1"}
+    expected: {artifact: frozen-values, pointer: /nrl_dt_equilibration/effective_mass_ratio, unit: "1"}
+    unit: "1"
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 2.0e-14
+  - id: nrl-equilibration-frequency-reference
+    type: reference
+    reference_id: nrl-2023
+    actual: {artifact: derived-values, pointer: /nrl_dt_equilibration/frequency_s-1, unit: s^-1}
+    expected: {artifact: frozen-values, pointer: /nrl_dt_equilibration/frequency_s-1, unit: s^-1}
+    unit: s^-1
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 2.0e-14
+  - id: nrl-equilibration-tau-e-reference
+    type: reference
+    reference_id: nrl-2023
+    actual: {artifact: derived-values, pointer: /nrl_dt_equilibration/tau_e_equation_s, unit: s}
+    expected: {artifact: frozen-values, pointer: /nrl_dt_equilibration/tau_e_equation_s, unit: s}
+    unit: s
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 2.0e-14
+  - id: nrl-equilibration-tau-delta-reference
+    type: reference
+    reference_id: nrl-2023
+    actual: {artifact: derived-values, pointer: /nrl_dt_equilibration/tau_delta_temperature_s, unit: s}
+    expected: {artifact: frozen-values, pointer: /nrl_dt_equilibration/tau_delta_temperature_s, unit: s}
+    unit: s
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 2.0e-14
+  - id: nrl-bremsstrahlung-reference
+    type: reference
+    reference_id: nrl-2023
+    actual: {artifact: derived-values, pointer: /nrl_bremsstrahlung/power_w_m-3, unit: W m^-3}
+    expected: {artifact: frozen-values, pointer: /nrl_bremsstrahlung/power_w_m-3, unit: W m^-3}
+    unit: W m^-3
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 2.0e-14
+
+  - id: bosch-hale-reactivity-finite
+    type: finite
+    source: {artifact: derived-values, pointer: /bosch_hale_dt/reactivity_m3_s, unit: m^3 s^-1}
+    unit: m^3 s^-1
+  - id: bosch-hale-reactivity-positive
+    type: range
+    source: {artifact: derived-values, pointer: /bosch_hale_dt/reactivity_m3_s, unit: m^3 s^-1}
+    unit: m^3 s^-1
+    minimum: 0.0
+    inclusive_minimum: false
+  - id: bosch-hale-equation-reference
+    type: reference
+    reference_id: bosch-hale-1992
+    actual: {artifact: derived-values, pointer: /bosch_hale_dt/reactivity_m3_s, unit: m^3 s^-1}
+    expected: {artifact: frozen-values, pointer: /bosch_hale_dt/reactivity_m3_s, unit: m^3 s^-1}
+    unit: m^3 s^-1
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 5.0e-14
+
+  - id: spitzer-table-finite
+    type: finite
+    source: {artifact: published-tables, pointer: /spitzer_harm_1953_table_iii/rows, unit: "1"}
+    unit: "1"
+  - id: spitzer-table-range
+    type: range
+    source: {artifact: published-tables, pointer: /spitzer_harm_1953_table_iii/rows, unit: "1"}
+    unit: "1"
+    minimum: 0.0
+    maximum: 16.0
+  - id: evans-5kev-energy-range
+    type: range
+    source: {artifact: published-tables, pointer: /evans_1973_table_i/rows/5_keV, component: 0, unit: MeV}
+    unit: MeV
+    minimum: 0.0
+    maximum: 3.5
+  - id: evans-5kev-fraction-range
+    type: range
+    source: {artifact: published-tables, pointer: /evans_1973_table_i/rows/5_keV, component: 1, unit: "1"}
+    unit: "1"
+    minimum: 0.0
+    maximum: 1.0
+  - id: evans-50kev-energy-range
+    type: range
+    source: {artifact: published-tables, pointer: /evans_1973_table_i/rows/50_keV, component: 0, unit: MeV}
+    unit: MeV
+    minimum: 0.0
+    maximum: 3.5
+  - id: evans-50kev-fraction-range
+    type: range
+    source: {artifact: published-tables, pointer: /evans_1973_table_i/rows/50_keV, component: 1, unit: "1"}
+    unit: "1"
+    minimum: 0.0
+    maximum: 1.0
+  - id: evans-100kev-energy-range
+    type: range
+    source: {artifact: published-tables, pointer: /evans_1973_table_i/rows/100_keV, component: 0, unit: MeV}
+    unit: MeV
+    minimum: 0.0
+    maximum: 3.5
+  - id: evans-100kev-fraction-range
+    type: range
+    source: {artifact: published-tables, pointer: /evans_1973_table_i/rows/100_keV, component: 1, unit: "1"}
+    unit: "1"
+    minimum: 0.0
+    maximum: 1.0
+  - id: evans-stopping-equation-reference
+    type: reference
+    reference_id: evans-1973
+    actual: {artifact: derived-values, pointer: /evans_stopping_partition/equation_ion_fraction, unit: "1"}
+    expected: {artifact: frozen-values, pointer: /evans_stopping_partition/equation_ion_fraction, unit: "1"}
+    unit: "1"
+    metric: close
+    absolute_tolerance: 0.0
+    relative_tolerance: 5.0e-14
+  - id: evans-50kev-selected-printed-value
+    type: reference
+    reference_id: evans-1973
+    description: Equation at the displayed energy agrees with the visually transcribed fraction to half its last printed decimal unit.
+    actual: {artifact: derived-values, pointer: /evans_stopping_partition/equation_ion_fraction/0, unit: "1"}
+    expected: {artifact: published-tables, pointer: /evans_1973_table_i/rows/50_keV/4/1, unit: "1"}
+    unit: "1"
+    metric: close
+    absolute_tolerance: 0.005
+    relative_tolerance: 0.0
+  - id: evans-100kev-selected-printed-value
+    type: reference
+    reference_id: evans-1973
+    description: Equation at the displayed energy agrees with the visually transcribed fraction to half its last printed decimal unit.
+    actual: {artifact: derived-values, pointer: /evans_stopping_partition/equation_ion_fraction/1, unit: "1"}
+    expected: {artifact: published-tables, pointer: /evans_1973_table_i/rows/100_keV/3/1, unit: "1"}
+    unit: "1"
+    metric: close
+    absolute_tolerance: 0.005
+    relative_tolerance: 0.0
+
+  - id: codata-electron-mass
+    type: reference
+    reference_id: codata-2022
+    actual: {artifact: derived-values, pointer: /constants/electron_mass_kg, unit: kg}
+    expected: {artifact: frozen-values, pointer: /constants/electron_mass_kg, unit: kg}
+    unit: kg
+    metric: relative
+    tolerance: 1.0e-15
+    scale_floor: 1.0e-300
+  - id: codata-deuteron-ratio
+    type: reference
+    reference_id: codata-2022
+    actual: {artifact: derived-values, pointer: /constants/deuteron_proton_mass_ratio, unit: "1"}
+    expected: {artifact: frozen-values, pointer: /constants/deuteron_proton_mass_ratio, unit: "1"}
+    unit: "1"
+    metric: relative
+    tolerance: 1.0e-15
+    scale_floor: 1.0e-300
+  - id: codata-triton-ratio
+    type: reference
+    reference_id: codata-2022
+    actual: {artifact: derived-values, pointer: /constants/triton_proton_mass_ratio, unit: "1"}
+    expected: {artifact: frozen-values, pointer: /constants/triton_proton_mass_ratio, unit: "1"}
+    unit: "1"
+    metric: relative
+    tolerance: 1.0e-15
+    scale_floor: 1.0e-300
+
+package:
+  embed_artifacts: true
+  html: true
+  pdf: true
+
+metadata:
+  source_byte_complete: false
+  source_limitations: "Bosch-Hale erratum remains unreviewed. See source_manifest.json."
+  scope: "Reference-equation and published-table checks; no production solver is executed."
+  source_qualification_complete: false
+  tolerance_policy: "Tight tolerances reproduce equations; published scientific/model uncertainty is documented separately and is not used as a regression tolerance."

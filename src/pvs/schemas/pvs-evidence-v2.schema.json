@@ -1,0 +1,422 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chatwoodlabs.com/schemas/pvs-evidence-v2.schema.json",
+  "title": "Physics Validation Suite evidence envelope v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "record", "integrity"],
+  "properties": {
+    "schema": {"const": "pvs-evidence/2"},
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run", "pvs", "case", "subject", "execution", "artifacts", "references", "checks", "summary", "package", "environment"],
+      "properties": {
+        "run": {"$ref": "#/$defs/run"},
+        "pvs": {"$ref": "#/$defs/pvs"},
+        "case": {"$ref": "#/$defs/case"},
+        "subject": {"$ref": "#/$defs/subject"},
+        "execution": {"$ref": "#/$defs/execution"},
+        "artifacts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/artifact"}},
+        "references": {"type": "array", "items": {"$ref": "#/$defs/reference"}},
+        "checks": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/check"}},
+        "summary": {"$ref": "#/$defs/summary"},
+        "package": {"$ref": "#/$defs/package_contract"},
+        "environment": {"$ref": "#/$defs/environment"}
+      }
+    },
+    "integrity": {"$ref": "#/$defs/integrity"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "run": {
+      "type": "object", "additionalProperties": false,
+      "required": ["run_id", "mode", "started_at", "finished_at", "duration_seconds"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 45, "maxLength": 45, "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"},
+        "mode": {"enum": ["run", "validate"]},
+        "started_at": {"$ref": "#/$defs/timestamp"},
+        "finished_at": {"$ref": "#/$defs/timestamp"},
+        "duration_seconds": {"type": "number", "minimum": 0}
+      }
+    },
+    "pvs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "version", "implementation", "case_schema", "evidence_schema", "integrity_profile", "content_identity", "build"],
+      "properties": {
+        "name": {"const": "Physics Validation Suite"},
+        "version": {"type": "string", "minLength": 1, "maxLength": 64},
+        "implementation": {"const": "chatwood-labs/physics-validation-suite"},
+        "case_schema": {"const": "pvs-case/2"},
+        "evidence_schema": {"const": "pvs-evidence/2"},
+        "integrity_profile": {"const": "pvs-rfc8785-sha256-v1"},
+        "content_identity": {"$ref": "#/$defs/content_identity"},
+        "build": {"$ref": "#/$defs/build"}
+      }
+    },
+    "content_identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["profile", "canonicalization", "algorithm", "digest", "files_count"],
+      "properties": {
+        "profile": {"const": "pvs-installed-package-tree-sha256-v1"},
+        "canonicalization": {"const": "RFC8785"},
+        "algorithm": {"const": "sha256"},
+        "digest": {"$ref": "#/$defs/sha256"},
+        "files_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "build": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_identity", "source_repository", "source_revision", "source_dirty", "source_date_epoch"],
+      "properties": {
+        "source_identity": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/source_identity"}
+          ]
+        },
+        "source_repository": {"type": ["string", "null"], "format": "uri"},
+        "source_revision": {"type": ["string", "null"], "minLength": 40, "maxLength": 64, "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])[0-9a-f]{40}([0-9a-f]{24})?$"},
+        "source_dirty": {"type": ["boolean", "null"]},
+        "source_date_epoch": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "source_identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["profile", "algorithm", "digest"],
+      "properties": {
+        "profile": {"enum": ["pvs-source-archive-sha256-v1", "pvs-source-tree-sha256-v1"]},
+        "algorithm": {"const": "sha256"},
+        "digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "subject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 200},
+        "version": {"type": "string", "minLength": 1, "maxLength": 200},
+        "revision": {"type": "string", "maxLength": 200},
+        "source_repository": {"type": "string", "format": "uri"},
+        "description": {"type": "string", "maxLength": 2000}
+      }
+    },
+    "case": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "version", "title", "description", "classifications", "filename", "raw_sha256", "raw_size_bytes", "semantic_sha256", "resolved_definition"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])[a-z0-9][a-z0-9._-]{1,127}$"},
+        "version": {"type": "string", "minLength": 1, "maxLength": 64},
+        "title": {"type": "string", "minLength": 1, "maxLength": 240},
+        "description": {"type": ["string", "null"], "maxLength": 4000},
+        "classifications": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["verification", "validation", "regression", "cross-code-comparison"]}},
+        "filename": {"type": "string", "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])[^/\\\\\\u0000]{1,255}$"},
+        "raw_sha256": {"$ref": "#/$defs/sha256"},
+        "raw_size_bytes": {"type": "integer", "minimum": 1},
+        "semantic_sha256": {"$ref": "#/$defs/sha256"},
+        "resolved_definition": {
+          "type": "object",
+          "required": ["schema"],
+          "properties": {"schema": {"const": "pvs-case/2"}}
+        }
+      }
+    },
+    "file_identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["package_path", "sha256", "size_bytes"],
+      "properties": {
+        "package_path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "resolved_executable": {
+      "type": "object", "additionalProperties": false,
+      "required": ["requested", "resolved"],
+      "properties": {
+        "requested": {"type": "string", "minLength": 1},
+        "resolved": {"type": "boolean"},
+        "filename": {"type": "string", "minLength": 1},
+        "launch_profile": {"const": "pvs-private-executable-snapshot/1"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 0},
+        "case_relative_path": {"type": "string", "minLength": 1},
+        "post_execution_sha256": {"$ref": "#/$defs/sha256"},
+        "post_execution_size_bytes": {"type": "integer", "minimum": 0},
+        "unchanged_during_execution": {"type": "boolean"}
+      },
+      "allOf": [
+        {
+          "if": {"required": ["resolved"], "properties": {"resolved": {"const": true}}},
+          "then": {
+            "required": ["filename", "launch_profile", "unchanged_during_execution"],
+            "oneOf": [
+              {"required": ["sha256", "size_bytes", "post_execution_sha256", "post_execution_size_bytes"]},
+              {
+                "not": {
+                  "anyOf": [
+                    {"required": ["sha256"]},
+                    {"required": ["size_bytes"]},
+                    {"required": ["post_execution_sha256"]},
+                    {"required": ["post_execution_size_bytes"]}
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {"required": ["resolved"], "properties": {"resolved": {"const": false}}},
+          "then": {
+            "not": {
+              "anyOf": [
+                {"required": ["launch_profile"]},
+                {"required": ["sha256"]},
+                {"required": ["size_bytes"]},
+                {"required": ["post_execution_sha256"]},
+                {"required": ["post_execution_size_bytes"]},
+                {"required": ["unchanged_during_execution"]}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "execution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mode", "command", "working_directory", "started_at", "finished_at", "duration_seconds", "return_code", "expected_exit_codes", "succeeded", "error", "declared_environment", "resolved_executable"],
+      "properties": {
+        "mode": {"enum": ["run", "validate"]},
+        "command": {"oneOf": [{"type": "null"}, {"type": "array", "minItems": 1, "maxItems": 512, "prefixItems": [{"type": "string", "minLength": 1, "maxLength": 8192}], "items": {"type": "string", "maxLength": 8192}}]},
+        "working_directory": {"type": "string"},
+        "started_at": {"$ref": "#/$defs/timestamp"},
+        "finished_at": {"$ref": "#/$defs/timestamp"},
+        "duration_seconds": {"type": "number", "minimum": 0},
+        "return_code": {"type": ["integer", "null"]},
+        "expected_exit_codes": {"type": "array", "uniqueItems": true, "items": {"type": "integer", "minimum": 0, "maximum": 255}},
+        "succeeded": {"type": "boolean"},
+        "error": {"type": ["string", "null"]},
+        "declared_environment": {"type": "object", "propertyNames": {"pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])[A-Za-z_][A-Za-z0-9_]*$"}, "additionalProperties": {"type": "string"}},
+        "resolved_executable": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/resolved_executable"}]},
+        "stdout": {"$ref": "#/$defs/file_identity"},
+        "stderr": {"$ref": "#/$defs/file_identity"}
+      },
+      "allOf": [
+        {
+          "if": {"required": ["mode"], "properties": {"mode": {"const": "run"}}},
+          "then": {
+            "required": ["stdout", "stderr"],
+            "properties": {
+              "command": {"type": "array", "minItems": 1},
+              "stdout": {"properties": {"package_path": {"const": "logs/stdout.txt"}}},
+              "stderr": {"properties": {"package_path": {"const": "logs/stderr.txt"}}}
+            },
+            "allOf": [
+              {
+                "if": {
+                  "required": ["succeeded", "resolved_executable"],
+                  "properties": {
+                    "succeeded": {"const": true},
+                    "resolved_executable": {
+                      "type": "object",
+                      "required": ["resolved"],
+                      "properties": {"resolved": {"const": true}}
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "resolved_executable": {
+                      "required": ["sha256", "size_bytes", "post_execution_sha256", "post_execution_size_bytes"],
+                      "properties": {"unchanged_during_execution": {"const": true}}
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "else": {
+            "properties": {
+              "stdout": false,
+              "stderr": false
+            }
+          }
+        }
+      ]
+    },
+    "snapshot": {
+      "type": "object", "additionalProperties": false, "required": ["exists"],
+      "properties": {
+        "exists": {"type": "boolean"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 0},
+        "resolution_error": {"type": "string", "minLength": 1}
+      }
+    },
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "role", "format", "required", "path", "media_type", "description", "expected_sha256", "expected_sha256_matches", "pre_execution", "validation_input", "post_validation", "package_path"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$"},
+        "role": {"enum": ["subject", "input", "reference", "output", "auxiliary"]},
+        "format": {"enum": ["json", "csv", "netcdf", "text", "binary"]},
+        "required": {"type": "boolean"},
+        "path": {"type": "string", "minLength": 1},
+        "media_type": {"type": ["string", "null"]},
+        "description": {"type": ["string", "null"]},
+        "expected_sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+        "expected_sha256_matches": {"type": ["boolean", "null"]},
+        "pre_execution": {"$ref": "#/$defs/snapshot"},
+        "validation_input": {"$ref": "#/$defs/snapshot"},
+        "post_validation": {"$ref": "#/$defs/snapshot"},
+        "package_path": {"type": ["string", "null"]}
+      }
+    },
+    "reference": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "citation", "locator"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$"},
+        "type": {"enum": ["analytic", "published", "experimental", "canonical-fixture", "cross-code"]},
+        "citation": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "locator": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "artifact": {"type": "string"},
+        "source_location": {"type": "string", "maxLength": 1000},
+        "accessed_utc": {"type": "string", "format": "date"},
+        "derivation": {"type": "string", "maxLength": 4000},
+        "notes": {"type": "string", "maxLength": 4000}
+      }
+    },
+    "check": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "status", "required", "summary", "observed", "criterion"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$"},
+        "type": {"enum": ["exists", "schema", "finite", "range", "monotonic", "compare", "reference", "conservation"]},
+        "status": {"enum": ["PASS", "WARN", "FAIL", "ERROR", "SKIP"]},
+        "required": {"type": "boolean"},
+        "summary": {"type": "string"},
+        "observed": {"type": "object"},
+        "criterion": {"type": "object"},
+        "reference_id": {"type": "string"}
+      },
+      "allOf": [
+        {
+          "if": {"required": ["status"], "properties": {"status": {"enum": ["WARN", "SKIP"]}}},
+          "then": {"properties": {"required": {"const": false}}}
+        },
+        {
+          "if": {"required": ["status"], "properties": {"status": {"const": "FAIL"}}},
+          "then": {"properties": {"required": {"const": true}}}
+        }
+      ]
+    },
+    "counts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["PASS", "WARN", "FAIL", "ERROR", "SKIP"],
+      "properties": {
+        "PASS": {"type": "integer", "minimum": 0},
+        "WARN": {"type": "integer", "minimum": 0},
+        "FAIL": {"type": "integer", "minimum": 0},
+        "ERROR": {"type": "integer", "minimum": 0},
+        "SKIP": {"type": "integer", "minimum": 0}
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "checks_total", "counts", "provenance_status", "provenance_issues"],
+      "properties": {
+        "status": {"enum": ["PASS", "WARN", "FAIL", "ERROR", "SKIP"]},
+        "checks_total": {"type": "integer", "minimum": 1},
+        "counts": {"$ref": "#/$defs/counts"},
+        "provenance_status": {"enum": ["COMPLETE", "INCOMPLETE"]},
+        "provenance_issues": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "resolved_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["effective", "source"],
+      "properties": {
+        "effective": {"type": "boolean"},
+        "source": {"enum": ["schema_default", "case", "runtime_override"]}
+      }
+    },
+    "package_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": ["manifest_schema", "policy", "report_profiles"],
+      "properties": {
+        "manifest_schema": {"const": "pvs-manifest/2"},
+        "policy": {
+          "type": "object", "additionalProperties": false,
+          "required": ["embed_artifacts", "html", "pdf"],
+          "properties": {
+            "embed_artifacts": {"$ref": "#/$defs/resolved_policy"},
+            "html": {"$ref": "#/$defs/resolved_policy"},
+            "pdf": {"$ref": "#/$defs/resolved_policy"}
+          }
+        },
+        "report_profiles": {
+          "type": "object", "additionalProperties": false,
+          "required": ["html", "pdf"],
+          "properties": {
+            "html": {"const": "pvs-html/2"},
+            "pdf": {"const": "pvs-pdf/2"}
+          }
+        }
+      }
+    },
+    "dependency": {
+      "type": "object", "additionalProperties": false, "required": ["name", "version"],
+      "properties": {"name": {"type": "string", "minLength": 1}, "version": {"type": "string", "minLength": 1}}
+    },
+    "environment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["python", "platform", "dependencies", "byteorder"],
+      "properties": {
+        "python": {"type": "object", "additionalProperties": false, "required": ["implementation", "version"], "properties": {"implementation": {"type": "string", "minLength": 1}, "version": {"type": "string", "minLength": 1}}},
+        "platform": {"type": "object", "additionalProperties": false, "required": ["system", "release", "machine"], "properties": {"system": {"type": "string"}, "release": {"type": "string"}, "machine": {"type": "string"}}},
+        "dependencies": {"type": "array", "items": {"$ref": "#/$defs/dependency"}},
+        "byteorder": {"enum": ["little", "big"]}
+      }
+    },
+    "integrity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["canonicalization", "algorithm", "digest", "evidence_id", "finding"],
+      "properties": {
+        "canonicalization": {"const": "RFC8785"},
+        "algorithm": {"const": "sha256"},
+        "digest": {"$ref": "#/$defs/sha256"},
+        "evidence_id": {"type": "string", "minLength": 75, "maxLength": 75, "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])pvs:sha256:[0-9a-f]{64}$"},
+        "finding": {"$ref": "#/$defs/finding"}
+      }
+    },
+    "finding": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["projection", "canonicalization", "algorithm", "status", "digest", "finding_id"],
+          "properties": {
+            "projection": {"const": "pvs-finding-projection/1"},
+            "canonicalization": {"const": "RFC8785"},
+            "algorithm": {"const": "sha256"},
+            "status": {"const": "ISSUED"},
+            "digest": {"$ref": "#/$defs/sha256"},
+            "finding_id": {"type": "string", "minLength": 86, "maxLength": 86, "pattern": "^(?![\\s\\S]*[\\r\\n\\u2028\\u2029])pvs-finding:v1:sha256:[0-9a-f]{64}$"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["projection", "canonicalization", "algorithm", "status", "reason"],
+          "properties": {
+            "projection": {"const": "pvs-finding-projection/1"},
+            "canonicalization": {"const": "RFC8785"},
+            "algorithm": {"const": "sha256"},
+            "status": {"const": "NOT_ISSUED"},
+            "reason": {"enum": ["INCOMPLETE_PROVENANCE", "ERROR_PRESENT"]}
+          }
+        }
+      ]
+    }
+  }
+}

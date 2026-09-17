@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["times", "population"],
+  "properties": {
+    "times": {"type": "array", "minItems": 2, "items": {"type": "number"}},
+    "population": {"type": "array", "minItems": 2, "items": {"type": "number"}}
+  }
+}
+

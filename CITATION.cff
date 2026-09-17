@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use PVS, cite this software and the scientific sources declared by your validation cases."
+title: "Physics Validation Suite"
+type: software
+version: 1.0.0a1
+date-released: 2026-09-17
+authors:
+  - name: "Chatwood Labs Ltd"
+url: "https://chatwoodlabs.com"
+repository-code: "https://github.com/chatwood-labs/physics-validation-suite"
+license: Apache-2.0
+abstract: >-
+  A code-agnostic framework that turns declared scientific validation and
+  verification checks into portable, reproducible and auditable evidence
+  packages with cryptographic identity and provenance.
+keywords:
+  - scientific software
+  - validation
+  - verification
+  - provenance
+  - reproducibility

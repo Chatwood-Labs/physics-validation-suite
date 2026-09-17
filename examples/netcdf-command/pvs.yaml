@@ -1,0 +1,54 @@
+schema: pvs-case/2
+id: example-netcdf-command
+version: 1.0.0
+title: Generic NetCDF command adapter
+classifications: [verification]
+
+subject:
+  name: tiny-netcdf-model
+  version: 1.0.0
+
+execution:
+  command: [python, model.py]
+  timeout_seconds: 30
+
+artifacts:
+  model-source:
+    path: model.py
+    role: subject
+    format: text
+  field:
+    path: output/field.nc
+    role: output
+    format: netcdf
+
+checks:
+  - id: field-exists
+    type: exists
+    artifact: field
+  - id: field-finite
+    type: finite
+    source: {artifact: field, variable: u, netcdf_decoding: pvs-netcdf/1, unit: "1"}
+    unit: "1"
+  - id: field-range
+    type: range
+    source: {artifact: field, variable: u, netcdf_decoding: pvs-netcdf/1, unit: "1"}
+    unit: "1"
+    minimum: 0.0
+    maximum: 1.0
+  - id: field-nonincreasing
+    type: monotonic
+    source: {artifact: field, variable: u, netcdf_decoding: pvs-netcdf/1, unit: "1"}
+    unit: "1"
+    direction: nonincreasing
+    absolute_tolerance: 0.0
+  - id: field-endpoint
+    type: compare
+    actual: {artifact: field, variable: u, netcdf_decoding: pvs-netcdf/1, reduce: last, unit: "1"}
+    expected: {value: 0.0, unit: "1"}
+    unit: "1"
+    metric: absolute
+    tolerance: 0.0
+
+package:
+  embed_artifacts: true

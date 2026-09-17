@@ -1,0 +1,63 @@
+{
+  "schema": "pvs-physics-source-manifest/1",
+  "audited_utc": "2026-09-14",
+  "sources": {
+    "openstax-shm": {
+      "sha256": "c9c35575b46612599d6be259a17bc22ef1f2abc49c8889ea7c9e45328bdba4e5",
+      "size_bytes": 394600,
+      "primary_locator": "https://openstax.org/books/university-physics-volume-1/pages/15-1-simple-harmonic-motion",
+      "citation": "OpenStax, University Physics Volume 1, Section 15.1, Simple Harmonic Motion.",
+      "locations": "Equations 15.3, 15.4 and 15.9: position, velocity, angular frequency.",
+      "accessed_utc": "2026-09-14",
+      "status": "official-source-equations-reviewed",
+      "hash_scope": "Exact downloaded official source representation; not redistributed. HTML bytes can change independently of equations.",
+      "redistributed_source_content": "None: no source prose, illustrations, tables or implementation code.",
+      "admission": "Mathematical equations cited as scientific background; chosen inputs, code and calculated values are original to this pack. No permission to redistribute the underlying publication is asserted."
+    },
+    "openstax-energy": {
+      "sha256": "d25828e944140a1f976e4020f3fc4c3781dc31f7ead0cdc40827f5c682091e36",
+      "size_bytes": 366615,
+      "primary_locator": "https://openstax.org/books/university-physics-volume-1/pages/15-2-energy-in-simple-harmonic-motion",
+      "citation": "OpenStax, University Physics Volume 1, Section 15.2, Energy in Simple Harmonic Motion.",
+      "locations": "Equation 15.12: total mechanical energy.",
+      "accessed_utc": "2026-09-14",
+      "status": "official-source-equations-reviewed",
+      "hash_scope": "Exact downloaded official source representation; not redistributed. HTML bytes can change independently of equations.",
+      "redistributed_source_content": "None: no source prose, illustrations, tables or implementation code.",
+      "admission": "Mathematical equations cited as scientific background; chosen inputs, code and calculated values are original to this pack. No permission to redistribute the underlying publication is asserted."
+    },
+    "mit-heat": {
+      "sha256": "088bb1fe418f3d4d512bcd20b931142f13a746069732fd70edbefe8c8decd951",
+      "size_bytes": 734739,
+      "primary_locator": "https://ocw.mit.edu/courses/18-303-linear-partial-differential-equations-fall-2006/d11b374a85c3fde55ec971fe587f8a50_heateqni.pdf",
+      "citation": "Matthew J. Hancock, The 1-D Heat Equation, MIT 18.303 Linear Partial Differential Equations, Fall 2006.",
+      "locations": "Printed pp. 2-4 Eqs. (2), (4)-(7): physical equation, initial/boundary conditions and scaling; pp. 6-7 Eqs. (18)-(20): separated sine-mode solution.",
+      "accessed_utc": "2026-09-14",
+      "status": "official-source-equations-reviewed",
+      "hash_scope": "Exact official PDF bytes; not redistributed.",
+      "redistributed_source_content": "None: no source prose, illustrations, tables or implementation code.",
+      "admission": "Mathematical equations cited as scientific background; chosen inputs, code and calculated values are original to this pack. No permission to redistribute the underlying publication is asserted."
+    },
+    "nasa-kepler": {
+      "sha256": "cc2c06ca3793e21d79ce1c67d222dd58ece16864a56e5ae95690aa3402bd9bdc",
+      "size_bytes": 14745,
+      "primary_locator": "https://pwg.gsfc.nasa.gov/stargaze/Skepl3rd.htm",
+      "citation": "David P. Stern, Kepler's Third Law, NASA Goddard archival educational page, updated 2008-05-20.",
+      "locations": "Section Kepler's Third Law for Earth Satellites: V^2/r= g R_E^2/r^2; T^2=(4 pi^2/(g R_E^2)) r^3. Replace g R_E^2 by the prescribed gravitational parameter mu.",
+      "accessed_utc": "2026-09-14",
+      "status": "official-source-equations-reviewed",
+      "hash_scope": "Exact downloaded official source representation; not redistributed. HTML bytes can change independently of equations.",
+      "redistributed_source_content": "None: no source prose, illustrations, tables or implementation code.",
+      "admission": "Mathematical equations cited as scientific background; chosen inputs, code and calculated values are original to this pack. No permission to redistribute the underlying publication is asserted."
+    }
+  },
+  "data_kind": "analytical-verification-targets",
+  "scalar_target_count": 36,
+  "reference_creation": "Frozen once from the separately implemented 80-digit Decimal evaluator in verify_frozen_values.py. The binary64 demonstration producer was not used to create the expected values.",
+  "claim_boundary": "Ideal analytical verification only. No experiment, measured material property, astrophysical catalogue value or production solver is represented. Agreement verifies only the declared equations and inputs.",
+  "limits": [
+    "Selected samples do not prove convergence, stability or long-time conservation of an external solver.",
+    "Numerical comparison tolerances address floating-point reproduction, not physical model uncertainty.",
+    "Source documents are cited and identified but not redistributed; their rights are not inherited by this pack."
+  ]
+}

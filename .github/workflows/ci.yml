@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pvs-ci-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  basic-validation:
+    name: Basic validation (Linux / Python 3.12)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # pinned commit
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # pinned commit
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install core package
+        run: python -m pip install .
+      - name: Check dependencies and Python syntax
+        run: |
+          python -m pip check
+          python -m compileall -q src/pvs
+          python -m pvs --version
+      - name: Validate examples, verify reports, and reject tampering
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import shutil
+          import subprocess
+          import sys
+          import tempfile
+
+          def pvs(*arguments):
+              result = subprocess.run(
+                  [sys.executable, '-m', 'pvs', *map(str, arguments)],
+                  text=True, capture_output=True,
+              )
+              if result.returncode:
+                  print(result.stdout)
+                  print(result.stderr, file=sys.stderr)
+                  raise SystemExit(result.returncode)
+
+          with tempfile.TemporaryDirectory(prefix='pvs-basic-', dir=os.environ['RUNNER_TEMP']) as temp:
+              root = Path(temp)
+              for kind in ('json', 'csv'):
+                  output = root / kind
+                  pvs('validate', f'examples/{kind}-existing/pvs.yaml', '--output', output)
+                  evidence = json.loads((output / 'evidence.json').read_text(encoding='utf-8'))
+                  if evidence['record']['summary']['status'] != 'PASS':
+                      raise SystemExit(f'{kind}: scientific checks did not pass')
+                  pvs('verify', output)
+                  for filename in ('manifest.json', 'report.html', 'report.pdf'):
+                      if (output / filename).stat().st_size == 0:
+                          raise SystemExit(f'{kind}: empty {filename}')
+                  print(f'PASS: {kind} validation, package verification, HTML and PDF')
+
+              tampered = root / 'tampered'
+              shutil.copytree(root / 'json', tampered)
+              with (tampered / 'report.html').open('ab') as report:
+                  report.write(b'\n<!-- deliberate CI tamper -->\n')
+              result = subprocess.run(
+                  [sys.executable, '-m', 'pvs', 'verify', str(tampered)],
+                  text=True, capture_output=True,
+              )
+              if result.returncode != 4:
+                  print(result.stdout)
+                  print(result.stderr, file=sys.stderr)
+                  raise SystemExit(f'Tamper check: expected exit 4, got {result.returncode}')
+              print('PASS: modified report rejected with integrity exit code 4')
+          PY
+      - name: Record validation scope
+        run: |
+          echo '### Basic validation passed' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Linux/Python 3.12 core install, dependency and syntax checks, JSON/CSV evidence, HTML/PDF verification, and tamper rejection.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Full tests, other Python versions, Windows/macOS, NetCDF, and release qualification were not covered by this job.' >> "$GITHUB_STEP_SUMMARY"

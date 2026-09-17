@@ -1,0 +1,25 @@
+{
+  "input_kind": "author-selected-demonstration-densities",
+  "mixtures": {
+    "d_he3": {
+      "first_density_m3": 5e+19,
+      "first_species": "D",
+      "second_density_m3": 5e+19,
+      "second_species": "He3"
+    },
+    "dd_total": {
+      "first_density_m3": 1e+20,
+      "first_species": "D",
+      "second_density_m3": 1e+20,
+      "second_species": "D"
+    },
+    "dt": {
+      "first_density_m3": 5e+19,
+      "first_species": "D",
+      "second_density_m3": 5e+19,
+      "second_species": "T"
+    }
+  },
+  "schema": "pvs-fusion-rate-inputs/1",
+  "temperature_policy": "Use only the ten published table temperatures; no interpolation or extrapolation."
+}

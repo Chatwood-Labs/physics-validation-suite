@@ -1,0 +1,41 @@
+schema: pvs-case/2
+id: example-boutpp-command-template
+version: 1.0.0
+title: BOUT++ generic command and NetCDF adapter template
+description: Requires a separately installed BOUT++ executable and a reviewed public case.
+classifications: [verification]
+
+subject:
+  name: BOUT++
+  version: "declare-installed-version-before-use"
+
+execution:
+  command: [bout++, -d, .]
+  timeout_seconds: 3600
+
+artifacts:
+  configuration:
+    path: BOUT.inp
+    role: input
+    format: text
+  dump:
+    path: BOUT.dmp.0.nc
+    role: output
+    format: netcdf
+
+checks:
+  - id: dump-exists
+    type: exists
+    artifact: dump
+  - id: density-finite
+    type: finite
+    source: {artifact: dump, variable: n, netcdf_decoding: pvs-netcdf/1, unit: "1"}
+    unit: "1"
+  - id: density-nonnegative
+    type: range
+    source: {artifact: dump, variable: n, netcdf_decoding: pvs-netcdf/1, unit: "1"}
+    unit: "1"
+    minimum: 0.0
+
+package:
+  embed_artifacts: false

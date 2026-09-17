@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "constants", "nrl_electron_collision", "nrl_dt_equilibration", "nrl_bremsstrahlung", "bosch_hale_dt", "evans_stopping_partition"],
+  "properties": {
+    "schema": {"const": "pvs-plasma-reference-values/3"},
+    "constants": {"type": "object"},
+    "nrl_electron_collision": {"$ref": "#/$defs/object"},
+    "nrl_dt_equilibration": {"$ref": "#/$defs/object"},
+    "nrl_bremsstrahlung": {"$ref": "#/$defs/object"},
+    "bosch_hale_dt": {"$ref": "#/$defs/object"},
+    "evans_stopping_partition": {"$ref": "#/$defs/object"}
+  },
+  "$defs": {
+    "object": {"type": "object", "minProperties": 1}
+  }
+}

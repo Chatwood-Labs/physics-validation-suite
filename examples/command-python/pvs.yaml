@@ -1,0 +1,95 @@
+schema: pvs-case/2
+id: example-command-python
+version: 1.0.0
+title: Exponential decay analytic verification
+description: Runs a Python subject through the generic no-shell command adapter.
+classifications: [verification, regression]
+
+subject:
+  name: tiny-decay-model
+  version: 1.0.0
+
+execution:
+  command: [python, model.py]
+  working_directory: .
+  timeout_seconds: 30
+  environment:
+    PYTHONHASHSEED: "0"
+  expected_exit_codes: [0]
+
+artifacts:
+  model-source:
+    path: model.py
+    role: subject
+    format: text
+  input:
+    path: input.json
+    role: input
+    format: json
+  result:
+    path: output/result.json
+    role: output
+    format: json
+  reference:
+    path: reference.json
+    role: reference
+    format: json
+    expected_sha256: e26564f4c016663c0e4c5ee5e26dfeb5a9082c603a9144c216a2bbb6213b5fa9
+  result-schema:
+    path: result.schema.json
+    role: reference
+    format: json
+    expected_sha256: 2557be465cd67e3c095bd7591d0784095b9472f40b757816145f0dd39c1812d6
+
+references:
+  - id: analytic-exponential-decay
+    type: analytic
+    citation: "Analytic solution u(t) = u0 exp(-lambda t)."
+    locator: "Declared analytic solution; no external source document."
+    artifact: reference
+    derivation: "Evaluated with IEEE-754 binary64 math.exp at the declared times."
+
+checks:
+  - id: result-exists
+    type: exists
+    artifact: result
+  - id: result-schema
+    type: schema
+    artifact: result
+    schema_artifact: result-schema
+  - id: population-finite
+    type: finite
+    source: {artifact: result, pointer: /population, unit: "1"}
+    unit: "1"
+  - id: population-positive
+    type: range
+    source: {artifact: result, pointer: /population, unit: "1"}
+    unit: "1"
+    minimum: 0.0
+  - id: population-decreases
+    type: monotonic
+    source: {artifact: result, pointer: /population, unit: "1"}
+    unit: "1"
+    direction: decreasing
+    absolute_tolerance: 0.0
+  - id: analytic-series
+    type: reference
+    reference_id: analytic-exponential-decay
+    actual: {artifact: result, pointer: /population, unit: "1"}
+    expected: {artifact: reference, pointer: /population, unit: "1"}
+    unit: "1"
+    metric: linf
+    tolerance: 1.0e-15
+  - id: analytic-final
+    type: compare
+    actual: {artifact: result, pointer: /population, reduce: last, unit: "1"}
+    expected: {value: 0.36787944117144233, unit: "1"}
+    unit: "1"
+    metric: relative
+    tolerance: 1.0e-14
+    scale_floor: 1.0e-300
+
+package:
+  embed_artifacts: true
+  html: true
+  pdf: true

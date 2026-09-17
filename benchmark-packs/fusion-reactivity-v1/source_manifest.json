@@ -1,0 +1,48 @@
+{
+  "audited_utc": "2026-09-14",
+  "claim_boundary": "A public reference dataset and adapter/normalisation verification case. The adapter reads the published table as an input; it does not independently predict reactivity or validate a fusion solver. Qualification covers inspected table entries and the elementary pair-counting equation only.",
+  "derivation": {
+    "density_origin": "Arbitrary documented input fixtures, not measured device data.",
+    "event_rate": "R12[m^-3 s^-1] = n1[m^-3] * n2[m^-3] * reactivity[m^3/s] / (1+delta12)",
+    "frozen_method": "Separately transcribed SI decimals and 60-digit Decimal arithmetic using analytically simplified pair-density factors; producer not imported or executed to make expected values.",
+    "identical_particles": "delta12=1 for DD and 0 for DT/DHe3. DD total event rate is not deuteron consumption rate or neutron emission rate.",
+    "relative_tolerance": 2e-14,
+    "si_conversion": "reactivity[m^3/s] = reactivity[cm^3/s] * 10^-6",
+    "tolerance_scope": "Binary floating-point conversion/multiplication regression only. Not physical model uncertainty."
+  },
+  "rights": {
+    "distribution_scope": "Only cited numerical facts, scientific formulae and original adapter/verification code are distributed. Full PDFs, copied publication prose, figures and external program code are excluded.",
+    "external_material_license_claim": "No blanket redistribution permission or open-source licence is asserted for either publication."
+  },
+  "schema": "pvs-physics-source-manifest/1",
+  "sources": {
+    "nrl-2023": {
+      "admitted_content": "30 numerical table entries plus their temperature coordinates, reaction identities and physical units; no publication prose or figures.",
+      "citation": "A. Beresnyak, 2023 NRL Plasma Formulary, Naval Research Laboratory (2023).",
+      "hash_scope": "Exact official PDF bytes, identified but not redistributed.",
+      "locations": [
+        "p.44: reaction labels (1a), (1b), (2), (3)",
+        "p.45 (PDF physical page 46): Maxwellian reaction-rate table, first three reaction columns"
+      ],
+      "model_uncertainty": "The table does not provide per-point uncertainties. Display precision is recorded separately and is not a physical error bar.",
+      "primary_locator": "https://www.nrl.navy.mil/Portals/38/PDF%20Files/NRL_Plasma_Formulary_2023.pdf",
+      "regime": "Maxwellian averaged reactivity at the ten listed ion temperatures; no interpolation, extrapolation or drift/anisotropy model.",
+      "sha256": "1a13dc8f0a1e493806adde235b22ccdd80eed939936a4622b36d0b563bea2596",
+      "size_bytes": 1270350,
+      "status": "official-source-byte-identified-visually-transcribed"
+    },
+    "xie-2023-pair-counting": {
+      "admitted_content": "Only mathematical event-rate relation R12=n1*n2*reactivity/(1+delta12). No reactivity fits, tables, code or figures from this paper are imported.",
+      "citation": "H. Xie, M. Tan, D. Luo, Z. Li and B. Liu, Fusion Reactivities with Drift bi-Maxwellian Ion Velocity Distributions, arXiv:2212.01840v2 (2023).",
+      "hash_scope": "Exact version 2 arXiv PDF bytes, identified but not redistributed.",
+      "locations": [
+        "p.2, Eq. (1), and definition of delta_12 immediately below"
+      ],
+      "primary_locator": "https://arxiv.org/abs/2212.01840v2",
+      "reviewed_copy_locator": "https://arxiv.org/pdf/2212.01840v2",
+      "sha256": "e925db2abfc9cb5e74e4aadf1162bd93253b4115bf75bd8f7b14059ba7f337d3",
+      "size_bytes": 2733915,
+      "status": "versioned-author-preprint-byte-identified-visually-reviewed"
+    }
+  }
+}
